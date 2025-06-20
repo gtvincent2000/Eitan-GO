@@ -16,9 +16,4 @@ A personal Japanese vocabulary notebook that uses AI to generate example sentenc
 - OpenAI API
 - Supabase (coming soon)
 
-## Setup
-
-```bash
-npm install
-npm run dev
 
