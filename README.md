@@ -1,4 +1,4 @@
-# EitanGo (英単語ノート)
+# Eitan-GO (英単語ノート)
 
 A personal Japanese vocabulary notebook that uses AI to generate example sentences and translations. Built with Next.js, React, Tailwind CSS, and OpenAI.
 
