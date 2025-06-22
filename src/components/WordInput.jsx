@@ -1,19 +1,56 @@
 import React from 'react';
 
-const WordInput = ({ word, setWord, setSentence }) => {
+const WordInput = ({ word, setWord, setSentence, setTranslation, loading, setLoading, setDefinition}) => {
   const handleChange = (e) => {
     setWord(e.target.value);
   };
 
-  const handleSubmit = () => {
-    // TODO: validate input
-    // TODO: call OpenAI API later
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setLoading(true);
     console.log(`Submitted word: ${word}`);
 
-    // TEMP - simulate sentence generation
-    setSentence(`${word} を使った例文です。`);
+    // Exception handling API call
+    try {
+      const response = await fetch("/api/generate", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ word }),
+      });
 
+      if (!response.ok) {
+        throw new Error("API returned an error");
+      }
+
+      const data = await response.json();
+      console.log("Generated sentence:", data.sentence);
+      console.log("English translation:", data.translation);
+
+      setSentence(data.sentence);
+      setTranslation(data.translation);
+
+      // TEMP: test definition fetch
+      const defRes = await fetch("/api/define", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ word }),
+      });
+
+      const defData = await defRes.json();
+      console.log("Definition data:", defData);
+      setDefinition(defData);
+
+    } catch (error) {
+      console.error("Error generating sentence:", error);
+      setSentence("Failed to generate sentence. Please try again.");
+      setTranslation("");
+    } finally {
+      setLoading(false);
+    }
   };
+
 
   return (
     <div className="flex flex-col gap-4 items-start">

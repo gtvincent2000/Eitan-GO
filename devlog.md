@@ -8,3 +8,16 @@ Friday June 20th 2025:
     What I Learned: I learned lots today, as it was the first time setting up a react project. Some highlights include an introduction to Tailwind styling, reinforsing JSX incertion syntax, and state and prop connectivity.
 
     What's Next: Tomorrow I plan to integrate OpenAI API to generate example sentences based on user input.
+
+Saturday June 21st 2025:
+    What I Worked On: Today I built and integrated a new /api/define route using the Jisho.org API to fetch word definitions. I walked through the route setup step-by-step, including input validation, error handling, and parsing nested JSON.
+                      On the frontend, I updated the handleSubmit function to fetch both the generated sentence and definition in parallel, added new state for storing the definition, and rendered the results with the word, reading, and meanings displayed clearly below the sentence.
+
+    What I Struggled With: I initially had trouble seeing console logs for the definition due to some confusion between the VS Code terminal and browser console. I also had to revisit how await and async interact to avoid racing ahead of data.
+                           Minor bugs like unused props and state not updating immediately helped reinforce good debugging practices.
+
+    What I Learned: I learned how to build a complete API route in Next.js from scratch and how to work with third-party APIs like Jisho. I also deepened my understanding of parsing JSON, using conditional rendering in React, and passing state between components.
+                    Finally, I gained experience in chaining multiple backend requests within a single submit flow while maintaining clean UX.
+
+    What's Next: Next, I’ll implement a toggle that displays romaji above the kana for beginner users. After that, I plan to tokenize generated sentences so individual words can be clicked to view definitions or add them to the notebook.
+                       These steps will help bring the Vocabulary Notebook feature closer to completion.
