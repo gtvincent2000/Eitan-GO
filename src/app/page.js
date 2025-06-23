@@ -1,6 +1,8 @@
 'use client';
 import { useState } from 'react';
 import WordInput from '../components/WordInput';
+import { toRomaji } from 'wanakana';
+import { formatRomaji } from "./utils/romajiFormatter";
 
 export default function Home() {
   const [word, setWord] = useState('');
@@ -8,6 +10,8 @@ export default function Home() {
   const [translation, setTranslation] = useState('');
   const [loading, setLoading] = useState(false);
   const [definition, setDefinition] = useState(null);
+  const [showRomaji, setShowRomaji] = useState(false);
+  const [romaji ,setRomaji] = useState("");
 
   return (
     <main className="min-h-screen bg-gray-50 p-6">
@@ -23,20 +27,46 @@ export default function Home() {
           setWord={setWord} 
           setSentence={setSentence} 
           setTranslation={setTranslation}
+          setRomaji={setRomaji}
           loading={loading}
           setLoading={setLoading}
+          definition={definition}
           setDefinition={setDefinition}
         />
       </section>
 
       {/* Sentence Generation Section */}
       <section className="mt-6 p-4 bg-white rounded shadow">
+        <div className="flex items-center gap-2 mt-4">
+          <label htmlFor="romaji-toggle" className="text-sm font-medium text-gray-700">
+             Show Romaji
+          </label>
+          <button
+            id="romaji-toggle"
+            onClick={() => setShowRomaji(!showRomaji)}
+            className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors duration-300 ${
+              showRomaji ? 'bg-blue-500' : 'bg-gray-300'
+            }`}
+          >
+            <span
+              className={`inline-block h-4 w-4 transform rounded-full bg-white transition-transform duration-300 ${
+                showRomaji ? 'translate-x-6' : 'translate-x-1'
+              }`}
+            />
+          </button>
+        </div>
+          
         <h2 className="text-xl font-semibold mb-2">Generated Sentence</h2>
         {loading ? (
           <p className="text-gray-500 italic">Generating sentence...</p>
         ) : sentence ? (
           <>
             <p className="mb-2">{sentence}</p>
+            {showRomaji && (
+              <p className = "text-gray-600 italic mb-2">
+                {romaji}
+              </p>
+            )}
             {translation && (
               <>
                 <h3 className="text-lg font-medium mt-2">English Translation</h3>
@@ -48,6 +78,7 @@ export default function Home() {
           <p>Enter a word to generate a sentence.</p>
         )}
       </section>
+
       {/* Definition Section */}
       {definition && (
         <section className="mt-6 p-4 bg-white rounded shadow">
@@ -68,6 +99,7 @@ export default function Home() {
           </ul>
         </section>
       )}
+
     </main>
   );
 }

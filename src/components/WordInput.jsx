@@ -1,6 +1,7 @@
 import React from 'react';
+import { formatRomaji } from "../app/utils/romajiFormatter";
 
-const WordInput = ({ word, setWord, setSentence, setTranslation, loading, setLoading, setDefinition}) => {
+const WordInput = ({ word, setWord, setSentence, setTranslation, loading, setLoading, setDefinition, setRomaji,}) => {
   const handleChange = (e) => {
     setWord(e.target.value);
   };
@@ -30,6 +31,12 @@ const WordInput = ({ word, setWord, setSentence, setTranslation, loading, setLoa
 
       setSentence(data.sentence);
       setTranslation(data.translation);
+
+      setRomaji(data.romaji);
+      
+
+      // setRomaji("dummy romaji output");
+
 
       // TEMP: test definition fetch
       const defRes = await fetch("/api/define", {
