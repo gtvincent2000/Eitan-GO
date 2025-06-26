@@ -17,9 +17,13 @@ export default function Home() {
   const [romajiWords, setRomajiWords] = useState([]);
 
   const handleWordClick = (word) => {
-    console.log("Clicked word:", word);
-    setClickedWord(word);
-  }
+    const confirmSave = window.confirm(`Add ${word} to your vocabulary notebook?`);
+    if (!confirmSave) return;
+
+    console.log("Saving word to notebook:", word);
+    
+    // TODO - Implement saving logic here (Supabase)
+  };
 
   return (
     <main className="min-h-screen bg-gray-50 p-6">
@@ -72,22 +76,15 @@ export default function Home() {
           <p className="text-gray-500 italic">Generating sentence...</p>
         ) : sentence ? (
           <>
-            {showRomaji && kanaWords.length > 0 && romajiWords.length > 0 ? (
+            {kanaWords.length > 0 && romajiWords.length > 0 ? (
               <ClickableSentence
                 kanaWords={kanaWords}
                 romajiWords={romajiWords}
-                onWordClick={(word) => {
-                  setClickedWord(word);
-                  console.log("Clicked:", word);
-                }}
+                onWordClick={handleWordClick}
+                showRomaji={showRomaji}
               />
             ) : (
-              <>
-                <p className="mb-2">{sentence}</p>
-                {showRomaji && (
-                  <p className="text-gray-600 italic mb-2">{romaji}</p>
-                )}
-              </>
+              <p className="mb-2">{sentence}</p>
             )}
 
             {translation && (

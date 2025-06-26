@@ -1,6 +1,7 @@
 import kuromoji from "kuromoji";
 import { toRomaji } from "wanakana";
 import path from "path";
+import { formatRomajiWithTokenizer } from "@/lib/romajiFormatter";
 
 // Global tokenizer cache
 let tokenizer = null;
@@ -32,18 +33,8 @@ export async function POST(request) {
   }
 
   try {
-    const tokenizer = await loadTokenizer();
-    const tokens = tokenizer.tokenize(sentence);
-
-    const kanaWords = tokens.map(t => t.surface_form);
-    const romajiWords = tokens.map(t => toRomaji(t.surface_form));
-    const formatted = romajiWords.join(" ");
-
-    return Response.json({
-      kanaWords,
-      romajiWords,
-      formatted,
-    });
+    const result = await formatRomajiWithTokenizer(sentence);
+    return Response.json(result);
   } catch (err) {
     console.error("Romaji formatting error:", err);
     return Response.json({ error: "Failed to format sentence" }, { status: 500 });

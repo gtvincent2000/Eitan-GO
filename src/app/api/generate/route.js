@@ -1,13 +1,9 @@
 import OpenAI from "openai";
-import { formatRomaji } from "@/lib/romajiFormatter";
+import { formatRomajiWithTokenizer } from "@/lib/romajiFormatter";
 
 const openai = new OpenAI({
   apiKey: process.env.OPENAI_API_KEY,
 });
-
-function containsKanji(text) {
-  return /[\u4e00-\u9faf]/.test(text);
-}
 
 
 export async function POST(request) {
@@ -26,68 +22,48 @@ export async function POST(request) {
   try {
     let japanese = "";
     let english = "";
-    let attempts = 0;
-    let success = false;
     let content = "";
 
-    while (attempts < 3 && !success) {
-      attempts++;
-      console.log(`Attempt ${attempts}...`);
 
-      const response = await openai.chat.completions.create({
-        model: "gpt-3.5-turbo",
-        messages: [
-          {
-            role: "system",
-            content: `You are a helpful assistant for beginner Japanese learners. 
-    All Japanese must be written using only hiragana and katakana — absolutely no kanji at all. 
-    Even common words like "食べる" must be written as たべる.
-    Respond only in the following format:
+    const response = await openai.chat.completions.create({
+      model: "gpt-3.5-turbo",
+      messages: [
+        {
+          role: "system",
+          content: `You are a helpful assistant for beginner Japanese learners.
+                      Generate a short, simple Japanese sentence that uses the given word.
 
-    Japanese: <your kana-only sentence>
-    English: <your English translation>
+                      - You may use kanji, but keep the sentence appropriate for learners.
+                      - The kanji should be common (JLPT N5/N4 level).
+                      - Keep the sentence short and clear.
+                      - Do not explain anything, just return the result.
 
-    Important rules:
-    - DO NOT use kanji for any reason. Even if the word is commonly written in kanji,
-      always use hiragana or katakana.
-    - The sentence must use the given word.
-    - Keep it short and simple for beginners.`
-          },
-          {
-            role: "user",
-            content: `Use the word "${word}" in a short sentence.`,
-          },
-        ],
-        max_tokens: 180,
-      });
+                      Respond *only* in this exact format:
 
-      content = response.choices[0].message.content.trim();
-      console.log("Raw OpenAI content:", content);
+                      Japanese: <your sentence with kanji and kana>
+                      English: <English translation of the sentence>`,
+        },
+        {
+          role: "user",
+          content: `Use the word "${word}" in a short sentence.`,
+        },
+      ],
+      max_tokens: 180,
+    });
 
-      const lines = content.split("\n");
-      for (const line of lines) {
-        if (line.toLowerCase().startsWith("japanese:")) {
-          japanese = line.replace(/japanese:/i, "").trim();
-        } else if (line.toLowerCase().startsWith("english:")) {
-          english = line.replace(/english:/i, "").trim();
-        }
-      }
+    content = response.choices[0].message.content.trim();
+    console.log("Raw OpenAI content:", content);
 
-      if (!containsKanji(japanese)) {
-        success = true;
-      } else {
-        console.warn("Retrying due to kanji:", japanese);
+    const lines = content.split("\n");
+    for (const line of lines) {
+      if (line.toLowerCase().startsWith("japanese:")) {
+        japanese = line.replace(/japanese:/i, "").trim();
+      } else if (line.toLowerCase().startsWith("english:")) {
+        english = line.replace(/english:/i, "").trim();
       }
     }
 
-    if (!success) {
-      return Response.json(
-        { error: "Failed to generate a kana-only sentence after 3 attempts." },
-        { status: 422 }
-      );
-    }
-
-    const romaji = await formatRomaji(japanese);
+    const romaji = await formatRomajiWithTokenizer(japanese);
 
     console.log("Parsed Japanese:", japanese);
     console.log("Parsed English:", english);
