@@ -3,6 +3,10 @@ import { useState } from 'react';
 import WordInput from '../components/WordInput';
 import { toRomaji } from 'wanakana';
 import ClickableSentence from '../components/ClickableSentence';
+import { supabase } from '../lib/supabaseClient';
+import * as wanakana from 'wanakana';
+import toast from 'react-hot-toast';
+
 
 export default function Home() {
   const [word, setWord] = useState('');
@@ -16,13 +20,30 @@ export default function Home() {
   const [kanaWords, setKanaWords] = useState([]);
   const [romajiWords, setRomajiWords] = useState([]);
 
-  const handleWordClick = (word) => {
-    const confirmSave = window.confirm(`Add ${word} to your vocabulary notebook?`);
+  const handleWordClick = async (word) => {
+    const confirmSave = confirm(`Add "${word}" to your vocabulary notebook?`);
     if (!confirmSave) return;
 
-    console.log("Saving word to notebook:", word);
-    
-    // TODO - Implement saving logic here (Supabase)
+    const index = kanaWords.indexOf(word);
+    const romaji = romajiWords[index] || "";
+    const kana = wanakana.toHiragana(romaji);
+
+    const toastId = toast.loading("Saving word...");
+
+    const { error } = await supabase.from("vocab").insert([
+      {
+        word,
+        kana,
+        romaji,
+      },
+    ]);
+
+    if (error) {
+      toast.error("Failed to save word. Check console.", { id: toastId });
+      console.error(error.message);
+    } else {
+      toast.success("Word saved to notebook!", { id: toastId });
+    }
   };
 
   return (

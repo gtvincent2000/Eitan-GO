@@ -34,3 +34,14 @@ Sunday June 22nd 2025:
 
     What's Next: Next, I plan to clean up the code a bit and then move on to refining sentence formatting even further — possibly by making generated words clickable to view definitions or add them to the notebook.
                  I may also revisit how definitions are displayed to improve UX.
+
+Wednesday June 26th 2025:
+    What I Worked On: Over the past few days I changed the sentence generation to include kanji and furigana. During this process I overhauled the romaji generation and added a loading spinner for the sentence generation.
+                      I also made words within the sentence clickable and connected the vocabulary notebook to supabase.
+
+    What I Struggled With: I struggled a little with the transition to having furigana above the kanji. Having to restructure existing code was more challenging than implementing entirely new code.
+                           I ran into logic errors sometimes in places where I forgot to delete unneccessary code.
+
+    What I Learned: I learned more about the APIs and about Supabase. I learned the importance of having easily readable code with comments to make it easier to go back and make changes later.
+
+    What's Next: In the coming days I will make a display for words added to the vocab notebook and overhaul the styling to make it more aesthetic and user friendly. I will then add a search / filter feature for saved words. 
