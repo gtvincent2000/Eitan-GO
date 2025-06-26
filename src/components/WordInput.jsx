@@ -1,9 +1,10 @@
-import React from 'react';
-import { formatRomaji } from "../app/utils/romajiFormatter";
+import React, { useState } from 'react';
 
-const WordInput = ({ word, setWord, setSentence, setTranslation, loading, setLoading, setDefinition, setRomaji,}) => {
+const WordInput = ({ word, setWord, setSentence, setTranslation, loading, setLoading, setDefinition, setRomaji, setKanaWords, setRomajiWords,}) => {
+  const [error, setError] = useState("");
   const handleChange = (e) => {
     setWord(e.target.value);
+    setError(""); // Clear error on input change
   };
 
   const handleSubmit = async (e) => {
@@ -22,8 +23,10 @@ const WordInput = ({ word, setWord, setSentence, setTranslation, loading, setLoa
       });
 
       if (!response.ok) {
-        throw new Error("API returned an error");
-      }
+        const errorData = await response.json();
+        const message = errorData?.error || "API returned an error";
+        throw new Error(message);
+    } 
 
       const data = await response.json();
       console.log("Generated sentence:", data.sentence);
@@ -32,10 +35,26 @@ const WordInput = ({ word, setWord, setSentence, setTranslation, loading, setLoa
       setSentence(data.sentence);
       setTranslation(data.translation);
 
-      setRomaji(data.romaji);
-      
+      // Fetch romaji formatting from the new API route
+      const formatRes = await fetch("/api/formatRomaji", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ sentence: data.sentence }),
+      });
 
-      // setRomaji("dummy romaji output");
+      if (!formatRes.ok) {
+        throw new Error("Romaji formatting API returned an error");
+      }
+
+      const formatData = await formatRes.json();
+      console.log("Romaji formatting response:", formatData);
+
+      setRomaji(formatData.formatted);
+      setKanaWords(formatData.kanaWords);
+      setRomajiWords(formatData.romajiWords);
+      
 
 
       // TEMP: test definition fetch
@@ -51,8 +70,13 @@ const WordInput = ({ word, setWord, setSentence, setTranslation, loading, setLoa
 
     } catch (error) {
       console.error("Error generating sentence:", error);
-      setSentence("Failed to generate sentence. Please try again.");
+      setError(error.message || "Something went wrong.");
+      setSentence("");
       setTranslation("");
+      setRomaji("");
+      setKanaWords([]);
+      setRomajiWords([]);
+      setDefinition(null);
     } finally {
       setLoading(false);
     }
@@ -76,6 +100,37 @@ const WordInput = ({ word, setWord, setSentence, setTranslation, loading, setLoa
       >
         Submit
       </button>
+
+      {loading && (
+        <div className="flex items-center gap-2 text-gray-600 text-sm mt-1">
+          <svg
+            className="animate-spin h-4 w-4 text-blue-500"
+            viewBox="0 0 24 24"
+            fill="none"
+          >
+            <circle
+              className="opacity-25"
+              cx="12"
+              cy="12"
+              r="10"
+              stroke="currentColor"
+              strokeWidth="4"
+            ></circle>
+            <path
+              className="opacity-75"
+              fill="currentColor"
+              d="M4 12a8 8 0 018-8v8z"
+            ></path>
+          </svg>
+          Generating sentence...
+        </div>
+      )}
+
+      {error && (
+        <p className="text-red-500 text-sm mt-2">
+          {error}
+        </p>
+      )}
     </div>
   );
 };

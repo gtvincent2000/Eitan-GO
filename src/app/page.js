@@ -2,7 +2,7 @@
 import { useState } from 'react';
 import WordInput from '../components/WordInput';
 import { toRomaji } from 'wanakana';
-import { formatRomaji } from "./utils/romajiFormatter";
+import ClickableSentence from '../components/ClickableSentence';
 
 export default function Home() {
   const [word, setWord] = useState('');
@@ -12,6 +12,14 @@ export default function Home() {
   const [definition, setDefinition] = useState(null);
   const [showRomaji, setShowRomaji] = useState(false);
   const [romaji ,setRomaji] = useState("");
+  const [clickedWord, setClickedWord] = useState("");
+  const [kanaWords, setKanaWords] = useState([]);
+  const [romajiWords, setRomajiWords] = useState([]);
+
+  const handleWordClick = (word) => {
+    console.log("Clicked word:", word);
+    setClickedWord(word);
+  }
 
   return (
     <main className="min-h-screen bg-gray-50 p-6">
@@ -32,6 +40,9 @@ export default function Home() {
           setLoading={setLoading}
           definition={definition}
           setDefinition={setDefinition}
+          setKanaWords={setKanaWords}
+          setRomajiWords={setRomajiWords}
+          
         />
       </section>
 
@@ -61,12 +72,24 @@ export default function Home() {
           <p className="text-gray-500 italic">Generating sentence...</p>
         ) : sentence ? (
           <>
-            <p className="mb-2">{sentence}</p>
-            {showRomaji && (
-              <p className = "text-gray-600 italic mb-2">
-                {romaji}
-              </p>
+            {showRomaji && kanaWords.length > 0 && romajiWords.length > 0 ? (
+              <ClickableSentence
+                kanaWords={kanaWords}
+                romajiWords={romajiWords}
+                onWordClick={(word) => {
+                  setClickedWord(word);
+                  console.log("Clicked:", word);
+                }}
+              />
+            ) : (
+              <>
+                <p className="mb-2">{sentence}</p>
+                {showRomaji && (
+                  <p className="text-gray-600 italic mb-2">{romaji}</p>
+                )}
+              </>
             )}
+
             {translation && (
               <>
                 <h3 className="text-lg font-medium mt-2">English Translation</h3>

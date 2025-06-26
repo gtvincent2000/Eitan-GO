@@ -21,3 +21,16 @@ Saturday June 21st 2025:
 
     What's Next: Next, I’ll implement a toggle that displays romaji above the kana for beginner users. After that, I plan to tokenize generated sentences so individual words can be clicked to view definitions or add them to the notebook.
                        These steps will help bring the Vocabulary Notebook feature closer to completion.
+
+Sunday June 22nd 2025:
+    What I Worked on Today: Today I implemented a working romaji output feature for generated Japanese sentences. I moved the formatting logic server-side using the kuromoji tokenizer to avoid browser issues, and built a formatter to improve readability.
+                            I also added a toggle that lets users show or hide romaji on demand.
+
+    What I struggled With: The biggest challenge was diagnosing why romaji wasn’t rendering. It turned out to be an environment issue where Node-only code was mistakenly running in the browser.
+                           Once that was resolved, I also had to clean up and debug prop passing and state updates to get the toggle and display working properly.
+
+    What I Learned: I learned how to isolate API errors using try/catch and logs, how to offload heavy processing to the server, and how kuromoji breaks Japanese into tokenized parts for analysis.
+                    I also got better at managing React props, async calls, and structuring conditionals for dynamic output.
+
+    What's Next: Next, I plan to clean up the code a bit and then move on to refining sentence formatting even further — possibly by making generated words clickable to view definitions or add them to the notebook.
+                 I may also revisit how definitions are displayed to improve UX.
