@@ -14,6 +14,6 @@ A personal Japanese vocabulary notebook that uses AI to generate example sentenc
 - React
 - Tailwind CSS
 - OpenAI API
-- Supabase (coming soon)
+- Supabase
 
 

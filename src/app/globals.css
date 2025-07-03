@@ -3,20 +3,31 @@
 :root {
   --background: #ffffff;
   --foreground: #171717;
+  --foreground-secondary: #6b7280;
+  --button-bg: #e5e7eb; 
+  --button-text: #1f2937; 
+  --button-hover: #d1d5db; 
+  --navbar-bg: #dce4ec;
+  --navbar-text: #171717;
+  --clickable-bg: #ffffff;
+  --clickable-hover: #e3e8ee;
+  --card-bg: #e7e8e9;
+  --input-bg: #ffffff;
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+.dark {
+  --background: #353941;
+  --foreground: #ededed;
+  --foreground-secondary: #d1d5db;
+  --button-bg: #374151; 
+  --button-text: #f9fafb; 
+  --button-hover: #8b9199; 
+  --navbar-bg: #3a4250;
+  --navbar-text: #f7fafc;
+  --clickable-bg: #353941;
+  --clickable-hover: #4b5563;
+  --card-bg: #414855;
+  --input-bg: #353941;
 }
 
 body {

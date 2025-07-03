@@ -165,14 +165,20 @@ export default function Home() {
   }, []);
 
   return (
-    <main className="min-h-screen bg-gray-50 p-6">
+    <main style={{ background: "var(--background)", color: "var(--foreground)" }}>
       {/* Header Section */}
-      <section>
+      <section
+        className="shadow p-4 mt-4"
+        style={{ background: "var(--background)", color: "var(--foreground)" }}
+      >
         <h1 className="text-2xl font-bold mb-4">Eitan-GO - 英単語ノート</h1>
       </section>
 
       {/* Word Input Section*/}
-      <section>
+      <section
+        className="shadow p-4 mt-4"
+        style={{ background: "var(--background)", color: "var(--foreground)" }}
+      >
         <WordInput 
           word={word} 
           setWord={setWord} 
@@ -190,16 +196,19 @@ export default function Home() {
       </section>
 
       {/* Sentence Generation Section */}
-      <section className="mt-6 p-4 bg-white rounded shadow">
+      <section
+        className="shadow p-4 mt-4"
+        style={{ background: "var(--background)", color: "var(--foreground)" }}
+      >
         <div className="flex items-center gap-2 mt-4">
-          <label htmlFor="romaji-toggle" className="text-sm font-medium text-gray-700">
+          <label htmlFor="romaji-toggle" className="text-sm font-medium">
              Show Romaji
           </label>
           <button
             id="romaji-toggle"
             onClick={() => setShowRomaji(!showRomaji)}
             className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors duration-300 ${
-              showRomaji ? 'bg-blue-500' : 'bg-gray-300'
+              showRomaji ? 'bg-blue-500 dark:bg-blue-700' : 'bg-gray-300 dark:bg-gray-600'
             }`}
           >
             <span
@@ -212,7 +221,12 @@ export default function Home() {
           
         <h2 className="text-xl font-semibold mb-2">Generated Sentence</h2>
         {loading ? (
-          <p className="text-gray-500 italic">Generating sentence...</p>
+          <p
+            style={{ color: "var(--foreground-secondary)" }}
+            className="italic"
+          >
+            Generating sentence...
+          </p>
         ) : sentence ? (
           <>
             {kanaWords.length > 0 && romajiWords.length > 0 ? (
@@ -240,11 +254,19 @@ export default function Home() {
 
       {/* Definition Section */}
       {definition && (
-        <section className="mt-6 p-4 bg-white rounded shadow">
+        <section
+          className="shadow p-4 mt-4"
+          style={{ background: "var(--background)", color: "var(--foreground)" }}
+        >
           <h2 className="text-xl font-semibold mb-2">Definition</h2>
           
           {loading ? (
-            <p className="italic text-gray-500">Loading definition...</p>
+            <p
+              style={{ color: "var(--foreground-secondary)" }}
+              className="italic"
+            >
+              Loading definition...
+            </p>
           ) : definition ? (
             <>
               <p><strong>Word:</strong> {definition.word}</p>
@@ -273,9 +295,11 @@ export default function Home() {
       )}
 
       {/* Vocabulary Notebook Section */}
-      <section className="mt-6 p-4 bg-white rounded shadow">
+      <section
+        className="shadow-md p-4 mt-4"
+        style={{ background: "var(--background)", color: "var(--foreground)" }}
+      >
         <h2 className="text-xl font-semibold mb-2">Vocabulary Notebook</h2>
-        <p className="text-xs text-gray-500">Click to flip</p>
 
         <div className="mb-4">
           <input
@@ -290,23 +314,39 @@ export default function Home() {
         <div className="mb-4 flex gap-2">
           <button
             onClick={() => setViewMode('grid')}
-            className={`px-4 py-2 rounded ${viewMode === 'grid' ? 'bg-blue-600 text-white' : 'bg-gray-200'}`}
+            className={`px-4 py-2 rounded transition-colors duration-300 hover:bg-[var(--button-hover)] ${
+              viewMode === 'grid'
+                ? 'bg-blue-600 text-white hover:text-gray-800'
+                : 'bg-gray-200 text-gray-800 dark:bg-gray-700 dark:text-gray-100'
+            }`}
           >
             Grid View
           </button>
+
           <button
             onClick={() => setViewMode('list')}
-            className={`px-4 py-2 rounded ${viewMode === 'list' ? 'bg-blue-600 text-white' : 'bg-gray-200'}`}
+            className={`px-4 py-2 rounded transition-colors duration-300 hover:bg-[var(--button-hover)] ${
+              viewMode === 'list'
+                ? 'bg-blue-600 text-white hover:text-gray-800' 
+                : 'bg-gray-200 text-gray-800 dark:bg-gray-700 dark:text-gray-100'
+            }`}
           >
             List View
           </button>
+
           <button
             onClick={() => setEditMode(!editMode)}
-            className={`px-4 py-2 rounded ${editMode ? 'bg-red-600 text-white' : 'bg-gray-200'}`}
+            className={`px-4 py-2 rounded transition-colors duration-300 hover:bg-[var(--button-hover)] ${
+              editMode
+                ? 'bg-red-600 text-white hover:bg-red-700 hover:text-white'
+                : 'bg-gray-200 text-gray-800 dark:bg-gray-700 dark:text-gray-100  hover:bg-red-700 hover:text-white'
+            }`}
           >
-            {editMode ? 'Exit Edit Mode' : 'Edit Notebook'}
+            {editMode ? 'Exit Edit Mode' : 'Enter Edit Mode'}
           </button>
         </div>
+
+        <p className="text-xs">Click to flip</p>
 
         {/* Conditional rendering for message OR list */}
         {vocabList.length === 0 ? (
@@ -357,48 +397,53 @@ export default function Home() {
                     transform-style-preserve-3d
                     ${flippedCards[entry.id] ? 'rotate-y-180' : ''}
                   `}
+                  style={{ background: "var(--card-bg)" }}
                 >
                   {/* Front */}
-                  <div className="
-                    absolute
-                    inset-0
-                    backface-hidden
-                    flex
-                    flex-col
-                    items-center
-                    justify-center
-                    p-4
-                    border
-                    rounded-lg
-                    shadow-sm
-                    bg-white
-                    text-center
-                  ">
+                  <div 
+                    className="
+                      absolute
+                      inset-0
+                      backface-hidden
+                      flex
+                      flex-col
+                      items-center
+                      justify-center
+                      p-4
+                      border
+                      rounded-lg
+                      shadow-sm
+                      text-center
+                    "
+                    style={{ background: "var(--card-bg)" }}
+                  >
                     <p className="font-bold text-2xl">{entry.word}</p>
                   </div>
 
                   {/* Back */}
-                  <div className="
-                    absolute
-                    inset-0
-                    backface-hidden
-                    rotate-y-180
-                    flex
-                    flex-col
-                    items-center
-                    justify-center
-                    p-4
-                    border
-                    rounded-lg
-                    shadow-sm
-                    bg-white
-                    text-center
-                  ">
+                  <div
+                    className="
+                      absolute
+                      inset-0
+                      backface-hidden
+                      rotate-y-180
+                      flex
+                      flex-col
+                      items-center
+                      justify-center
+                      p-4
+                      border
+                      rounded-lg
+                      shadow-sm
+                      text-center
+                    "
+                    style={{ background: "var(--card-bg)" }}
+                  >
                     <p className="font-semibold text-lg">{entry.word}</p>
-                    <p className="text-sm text-gray-600">Kana: {entry.kana}</p>
-                    <p className="text-sm text-gray-600">Romaji: {entry.romaji}</p>
-                    <p className="text-sm text-gray-600">Meanings:</p>
-                    <ul className="text-sm text-gray-700 list-disc list-inside">
+                    <p className="text-sm">Kana: {entry.kana}</p>
+                    <p className="text-sm">Romaji: {entry.romaji}</p>
+                    <p className="text-sm">Meanings:</p>
+                    <ul className="text-sm list-disc list-inside">
                       {entry.meanings && entry.meanings.length > 0 ? (
                         entry.meanings.map((meaning, index) => (
                           <li key={index}>{meaning}</li>

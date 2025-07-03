@@ -26,7 +26,7 @@ Sunday June 22nd 2025:
     What I Worked on Today: Today I implemented a working romaji output feature for generated Japanese sentences. I moved the formatting logic server-side using the kuromoji tokenizer to avoid browser issues, and built a formatter to improve readability.
                             I also added a toggle that lets users show or hide romaji on demand.
 
-    What I struggled With: The biggest challenge was diagnosing why romaji wasn’t rendering. It turned out to be an environment issue where Node-only code was mistakenly running in the browser.
+    What I Struggled With: The biggest challenge was diagnosing why romaji wasn’t rendering. It turned out to be an environment issue where Node-only code was mistakenly running in the browser.
                            Once that was resolved, I also had to clean up and debug prop passing and state updates to get the toggle and display working properly.
 
     What I Learned: I learned how to isolate API errors using try/catch and logs, how to offload heavy processing to the server, and how kuromoji breaks Japanese into tokenized parts for analysis.
@@ -45,3 +45,21 @@ Wednesday June 26th 2025:
     What I Learned: I learned more about the APIs and about Supabase. I learned the importance of having easily readable code with comments to make it easier to go back and make changes later.
 
     What's Next: In the coming days I will make a display for words added to the vocab notebook and overhaul the styling to make it more aesthetic and user friendly. I will then add a search / filter feature for saved words. 
+
+Wednesday July 3rd 2025:
+    What I Worked On: 
+        Over the last week I:
+        - Added the display for saved words in the Vocabulary Notebook, including card flipping for meanings.
+        - Updated Supabase integration to store definitions, manage RLS policies, and handle duplicate checks cleanly.
+        - Created a navbar with a dropdown-based dark mode toggle.
+        - Implemented full dark mode support across the Vocabulary Notebook page, including cards, input fields, loaders, clickable sentences, and hover states.
+
+    What I Struggled With: The most challenging part of the last week of development was learning and implementing global CSS variable theming with Tailwind, ensuring conditional styling worked without conflicts,
+                           and maintaining consistency across interactive components while preserving dark mode responsiveness.
+
+    What I Learned:
+        - How to implement global and conditional theming using CSS variables and Tailwind.
+        - How to debug and structure a consistent dark mode system in a scalable Next.js project.
+        - How to maintain consistent UI/UX while restructuring component styling.
+
+    What's Next: Next, I will move on to developing the Study Mode feature for Eitan-GO, enabling users to review and test themselves on saved vocabulary interactively.

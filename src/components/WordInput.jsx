@@ -88,11 +88,14 @@ const WordInput = ({ word, setWord, setSentence, setTranslation, loading, setLoa
       <label htmlFor="word-input" className="text-lg font-semibold">Enter a word:</label>
       <input
         type="text"
-        id="word-input"
         value={word}
         onChange={handleChange}
         placeholder="Type a Japanese word..."
-        className="border border-gray-300 rounded px-3 py-2 w-full"
+        className="border border-gray-300 rounded px-3 py-2 w-full transition-colors duration-200"
+        style={{
+          background: "var(--input-bg)",
+          color: "var(--foreground)"
+        }}
       />
       <button
         onClick={handleSubmit}
@@ -102,7 +105,10 @@ const WordInput = ({ word, setWord, setSentence, setTranslation, loading, setLoa
       </button>
 
       {loading && (
-        <div className="flex items-center gap-2 text-gray-600 text-sm mt-1">
+        <div
+          className="flex items-center gap-2 text-sm mt-1"
+          style={{ color: "var(--foreground-secondary)" }}
+        >
           <svg
             className="animate-spin h-4 w-4 text-blue-500"
             viewBox="0 0 24 24"
