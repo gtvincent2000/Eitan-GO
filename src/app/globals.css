@@ -7,12 +7,18 @@
   --button-bg: #e5e7eb; 
   --button-text: #1f2937; 
   --button-hover: #d1d5db; 
+  --correct-bg: #16a34a; 
+  --incorrect-bg: #dc2626; 
   --navbar-bg: #dce4ec;
   --navbar-text: #171717;
   --clickable-bg: #ffffff;
   --clickable-hover: #e3e8ee;
   --card-bg: #e7e8e9;
+  --card-border: #4b5563;
   --input-bg: #ffffff;
+  --popup-bg: #f3f4f6;
+  --popup-text: #1f2937;
+
 }
 
 .dark {
@@ -27,7 +33,10 @@
   --clickable-bg: #353941;
   --clickable-hover: #4b5563;
   --card-bg: #414855;
+  --card-border: #f9fafb;
   --input-bg: #353941;
+  --popup-bg: #2d3748;
+  --popup-text: #f7fafc;
 }
 
 body {
@@ -50,4 +59,17 @@ body {
 
 .transform-style-preserve-3d {
   transform-style: preserve-3d;
+}
+
+@keyframes shake {
+  0% { transform: translateX(0); }
+  20% { transform: translateX(-10px); }
+  40% { transform: translateX(10px); }
+  60% { transform: translateX(-10px); }
+  80% { transform: translateX(10px); }
+  100% { transform: translateX(0); }
+}
+
+.animate-shake {
+  animation: shake 0.6s ease;
 }

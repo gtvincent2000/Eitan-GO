@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect, useRef } from "react";
+import Link from "next/link";
 
 export default function Navbar() {
   const [dropdownOpen, setDropdownOpen] = useState(false);
@@ -59,31 +60,50 @@ export default function Navbar() {
 
         {dropdownOpen && (
           <div className="absolute right-0 mt-2 w-48 bg-white dark:bg-gray-800 rounded shadow-md z-50 p-2">
-            <div className="flex items-center justify-between p-2">
-              <span className="text-sm text-gray-700 dark:text-gray-300">Theme</span>
-              <button
-                onClick={toggleDarkMode}
-                className={`relative inline-flex h-6 w-12 items-center rounded-full transition-colors duration-300 ${
-                  darkMode ? 'bg-blue-800' : 'bg-pink-200'
-                }`}
-              >
-                {/* Sun Icon - Left */}
-                <span className="absolute left-1 text-xs">
-                  🌙
-                </span>
+            <div className="flex flex-col gap-2 p-2">
 
-                {/* Moon Icon - Right */}
-                <span className="absolute right-1 text-xs">
-                  ☀️
-                </span>
-
-                {/* Slider circle */}
-                <span
-                  className={`inline-block h-5 w-5 transform rounded-full bg-white shadow transition-transform duration-300 ${
-                    darkMode ? 'translate-x-6' : 'translate-x-1'
+            {/* Navigation */}
+            <Link href="/" className="text-gray-800 dark:text-gray-200 hover:text-blue-600 dark:hover:text-blue-400">
+                <button
+                  className="w-full text-left px-2 py-1 rounded hover:bg-gray-200 dark:hover:bg-gray-700"
+                >
+                  Vocab Notebook
+                </button>
+            </Link>
+            <Link href="/study" className="text-gray-800 dark:text-gray-200 hover:text-blue-600 dark:hover:text-blue-400">
+                <button
+                  className="w-full text-left px-2 py-1 rounded hover:bg-gray-200 dark:hover:bg-gray-700"
+                >
+                  Study
+                </button>
+            </Link>
+            
+              <div className= "flex items-center justify-between p-2">
+                <span className="text-sm text-gray-700 dark:text-gray-300">Theme</span>
+                <button
+                  onClick={toggleDarkMode}
+                  className={`relative inline-flex h-6 w-12 items-center rounded-full transition-colors duration-300 ${
+                    darkMode ? 'bg-blue-800' : 'bg-pink-200'
                   }`}
-                />
-              </button>
+                >
+                  {/* Sun Icon - Left */}
+                  <span className="absolute left-1 text-xs">
+                    🌙
+                  </span>
+
+                  {/* Moon Icon - Right */}
+                  <span className="absolute right-1 text-xs">
+                    ☀️
+                  </span>
+
+                  {/* Slider circle */}
+                  <span
+                    className={`inline-block h-5 w-5 transform rounded-full bg-white shadow transition-transform duration-300 ${
+                      darkMode ? 'translate-x-6' : 'translate-x-1'
+                    }`}
+                  />
+                </button>
+              </div>  
             </div>
           </div>
         )}

@@ -63,3 +63,21 @@ Wednesday July 3rd 2025:
         - How to maintain consistent UI/UX while restructuring component styling.
 
     What's Next: Next, I will move on to developing the Study Mode feature for Eitan-GO, enabling users to review and test themselves on saved vocabulary interactively.
+
+Friday July 11th 2025:
+    What I Worked On:
+        Over the last week I:
+        - Added a fully functional quiz mode and flashcard review mode to the study page, including a progress bar and completion popup
+        - Implemented randomized multi-type multiple-choice quizzes
+        - Added audio feedback for correct and incorrect answers in quiz mode
+    
+    What I Struggled With: The most challenging part of the last week of development was correctly implementing the conditional rendering of the different study modes and maintaining consistent styling across the entire application.
+
+    What I Learned:
+        - Advanced conditional rendering in React using structured patterns for clean, scalable feature additions.
+        - How to build reusable UI structures that respect consistent global theming and dark mode.
+        - Structured state management for quizzes, including managing randomized question generation and immediate feedback.
+        - Implementing gamified user feedback, including confetti scaling with performance and audio cues for correct/incorrect answers.
+
+    What's Next: I will either begin building the Home Page to create a clean landing for Eitan-GO or begin the Translation Page to implement the AI-powered parsing and translation feature.
+                 After adding one of these pages, I will focus on fine-tuning and testing the Vocabulary Notebook, Flashcard Mode, and Quiz Mode to ensure everything is polished, consistent, and bug-free before moving forward.

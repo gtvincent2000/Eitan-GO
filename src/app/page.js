@@ -311,6 +311,7 @@ export default function Home() {
           />
         </div>
 
+        {/* View Mode and Edit Mode Controls */}
         <div className="mb-4 flex gap-2">
           <button
             onClick={() => setViewMode('grid')}
@@ -368,7 +369,7 @@ export default function Home() {
                   perspective
                   cursor-pointer
                   w-full
-                  h-48
+                  h-80
                   flex
                   items-center
                   justify-center

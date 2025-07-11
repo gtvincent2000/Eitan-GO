@@ -5,6 +5,7 @@ A personal Japanese vocabulary notebook that uses AI to generate example sentenc
 ## Features
 - Add and track Japanese words
 - Get AI-generated example sentences (OpenAI)
+- Study saved vocabulary words with quizzes or flashcard review
 - Translate words between Japanese and English
 - Save and review vocab
 - Clean and responsive UI
