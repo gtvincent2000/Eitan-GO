@@ -87,6 +87,22 @@ export default function Navbar() {
                       e.currentTarget.style.background = "transparent";
                     }}
                   >
+                    Home
+                  </button>
+                </Link>
+                <Link href="/vocab" className="hover:text-blue-500">
+                  <button
+                    className="w-full text-left px-2 py-1 rounded transition-colors duration-200"
+                    style={{
+                      background: "transparent",
+                    }}
+                    onMouseEnter={(e) => {
+                      e.currentTarget.style.background = "var(--nav-clickable-hover)";
+                    }}
+                    onMouseLeave={(e) => {
+                      e.currentTarget.style.background = "transparent";
+                    }}
+                  >
                     Vocab Notebook
                   </button>
                 </Link>

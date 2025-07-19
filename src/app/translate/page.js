@@ -206,45 +206,47 @@ export default function TranslatePage() {
                             />
                         </button>
                     </div>
-                <div className="mt-8 w-full flex flex-col items-center text-center">
+                <div className="mt-8 w-full flex flex-col items-center justify-center text-center">
                     {/* Translation Display */}
-                    <h2 className="text-xl font-bold mb-2">Translation:</h2>
-                    <ClickableSentence
-                    kanaWords={kanaWords}
-                    romajiWords={romajiWords}
-                    showRomaji={showRomaji}
-                    onWordClick={async (word, event) => {
-                        const rect = event.target.getBoundingClientRect();
-                        setPopupCoords({
-                            top: rect.bottom + window.scrollY + 25,
-                            left: rect.left + window.scrollX,
-                        });
-
-                        setActiveWord(word);
-                        setDefinition(null);
-
-                        try {
-                            const res = await fetch("/api/define", {
-                            method: "POST",
-                            headers: { "Content-Type": "application/json" },
-                            body: JSON.stringify({ word }),
+                    <h2 className="text-2xl font-bold mb-2">Translation:</h2>
+                    <h1 className="text-3xl sm:text-6xl font-extrabold mb-4">
+                        <ClickableSentence
+                        kanaWords={kanaWords}
+                        romajiWords={romajiWords}
+                        showRomaji={showRomaji}
+                        onWordClick={async (word, event) => {
+                            const rect = event.target.getBoundingClientRect();
+                            setPopupCoords({
+                                top: rect.bottom + window.scrollY + 25,
+                                left: rect.left + window.scrollX,
                             });
-                            const data = await res.json();
-                            if (data && data.definition) {
-                            setDefinition(data.definition);
-                            } else {
-                            setDefinition({
-                                word,
-                                reading: "",
-                                meanings: ["No definition found."],
-                            });
+
+                            setActiveWord(word);
+                            setDefinition(null);
+
+                            try {
+                                const res = await fetch("/api/define", {
+                                method: "POST",
+                                headers: { "Content-Type": "application/json" },
+                                body: JSON.stringify({ word }),
+                                });
+                                const data = await res.json();
+                                if (data && data.definition) {
+                                setDefinition(data.definition);
+                                } else {
+                                setDefinition({
+                                    word,
+                                    reading: "",
+                                    meanings: ["No definition found."],
+                                });
+                                }
+                            } catch (err) {
+                                console.error(err);
+                                setDefinition("Failed to fetch definition.");
                             }
-                        } catch (err) {
-                            console.error(err);
-                            setDefinition("Failed to fetch definition.");
-                        }
-                    }}
-                    />
+                        }}
+                        />
+                    </h1>
                     {/* Definition Popup */}
                     <DefinitionPopup
                         word={activeWord}

@@ -8,24 +8,18 @@ export default function ClickableSentence({ kanaWords, romajiWords, onWordClick,
   const [hoveredIndex, setHoveredIndex] = useState(null);
 
   return (
-    <div className="flex flex-col items-start gap-1">
-      {/* Kanji + furigana line */}
-      <div className="flex flex-wrap gap-1">
-        {kanaWords.map((word, index) => (
+    <div className="flex flex-wrap justify-center gap-2 text-center">
+      {kanaWords.map((word, index) => (
+        <div key={index} className="flex flex-col items-center">
+          {/* Kanji + Furigana */}
           <span
-            key={index}
             onMouseEnter={() => setHoveredIndex(index)}
             onMouseLeave={() => setHoveredIndex(null)}
             onClick={(e) => onWordClick(word, e)}
-            className="
-              cursor-pointer 
-              px-1 py-0.5 
-              rounded 
-              transition-colors duration-200
-            "
+            className="cursor-pointer px-1 py-0.5 rounded transition-colors duration-200"
             style={{
               background: hoveredIndex === index ? "var(--clickable-hover)" : "var(--clickable-bg)",
-              color: "var(--foreground)"
+              color: "var(--foreground)",
             }}
           >
             <ruby>
@@ -40,22 +34,15 @@ export default function ClickableSentence({ kanaWords, romajiWords, onWordClick,
               )}
             </ruby>
           </span>
-        ))}
-      </div>
 
-      {/* Romaji line Below (toggleable) */}
-      {showRomaji && (
-        <div
-          className="flex flex-wrap gap-1 text-sm mt-1"
-          style={{ color: "var(--foreground-secondary)" }}
-        >
-          {romajiWords.map((word, index) => (
-            <span key={index} className="px-1">
-              {word}
+          {/* Romaji Below (conditionally) */}
+          {showRomaji && (
+            <span className="text-xs mt-1" style={{ color: "var(--foreground-secondary)" }}>
+              {romajiWords[index]}
             </span>
-          ))}
+          )}
         </div>
-      )}
-  </div>
+      ))}
+    </div>
   );
 }
