@@ -1,42 +1,74 @@
 @import "tailwindcss";
+@import "../styles/animations.css";
 
 :root {
-  --background: #ffffff;
+  /* General Styles */
+  --background: 	#f4f2fd;
   --foreground: #171717;
   --foreground-secondary: #6b7280;
-  --button-bg: #e5e7eb; 
-  --button-text: #1f2937; 
-  --button-hover: #d1d5db; 
+  /* Button Styles */
+  --button-bg: #2563eb; 
+  --button-text: #ffffff; 
+  --button-hover: #1d4ed8; 
   --correct-bg: #16a34a; 
   --incorrect-bg: #dc2626; 
-  --navbar-bg: #dce4ec;
+  /* Navbar Styles */
+  --navbar-bg: #e9e7f5;
   --navbar-text: #171717;
-  --clickable-bg: #ffffff;
-  --clickable-hover: #e3e8ee;
-  --card-bg: #e7e8e9;
+  --nav-clickable-bg: #f4f2fd;
+  --nav-clickable-hover: #dedaf3;
+  --dropdown-bg: #e9e7f5;
+  /* Card Styles */
+  --card-bg: #e9e7f5;
   --card-border: #4b5563;
-  --input-bg: #ffffff;
+  /* Input Field Styles */
+  --input-bg: #e9e7f5;
+  --input-text: #111111;
+  --placeholder-text: #666666;
+  --border-color: #cccccc;
+  /* Popup styles */
   --popup-bg: #f3f4f6;
   --popup-text: #1f2937;
+  /* Sentence Generation Styles */
+  --clickable-bg: #f4f2fd;
+  --clickable-hover: #e9e7f5;
 
 }
 
 .dark {
+  /* Dark Mode Styles */
   --background: #353941;
   --foreground: #ededed;
   --foreground-secondary: #d1d5db;
-  --button-bg: #374151; 
+  /* Button Styles */
+  --button-bg: #2563eb; 
   --button-text: #f9fafb; 
-  --button-hover: #8b9199; 
+  --button-hover: #1d4ed8; 
+  /* Navbar Styles */
   --navbar-bg: #3a4250;
   --navbar-text: #f7fafc;
-  --clickable-bg: #353941;
-  --clickable-hover: #4b5563;
+  --nav-clickable-bg: #353941;
+  --nav-clickable-hover: #4b5563;
+  --dropdown-bg: #414855;
+  /* Card Styles */
   --card-bg: #414855;
   --card-border: #f9fafb;
+  /* Input Field Styles */
   --input-bg: #353941;
+  --input-text: #f7fafc;
+  --placeholder-text: #aaaaaa;
+  --border-color: #444444;
+  /* Popup styles */
   --popup-bg: #2d3748;
   --popup-text: #f7fafc;
+  /* Sentence Generation Styles */
+  --clickable-bg: #353941;
+  --clickable-hover: #4b5563;
+}
+
+::placeholder {
+  color: var(--placeholder-text);
+  opacity: 1; 
 }
 
 body {
@@ -72,4 +104,13 @@ body {
 
 .animate-shake {
   animation: shake 0.6s ease;
+}
+
+.button-theme {
+  background: var(--button-bg);
+  color: var(--button-text);
+  transition: background 0.2s ease;
+}
+.button-theme:hover {
+  background: var(--button-hover);
 }

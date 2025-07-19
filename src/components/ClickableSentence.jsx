@@ -16,7 +16,7 @@ export default function ClickableSentence({ kanaWords, romajiWords, onWordClick,
             key={index}
             onMouseEnter={() => setHoveredIndex(index)}
             onMouseLeave={() => setHoveredIndex(null)}
-            onClick={() => onWordClick(word)}
+            onClick={(e) => onWordClick(word, e)}
             className="
               cursor-pointer 
               px-1 py-0.5 
@@ -59,5 +59,3 @@ export default function ClickableSentence({ kanaWords, romajiWords, onWordClick,
   </div>
   );
 }
-
-{/* className="cursor-pointer px-1 py-0.5 rounded hover:bg-blue-100 dark:hover:bg-gray-700 transition" */}

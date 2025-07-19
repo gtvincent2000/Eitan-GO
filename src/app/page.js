@@ -40,7 +40,15 @@ export default function Home() {
         body: JSON.stringify({ word }),
       });
       const data = await res.json();
-      setDefinition(data);
+      if (data && data.definition) {
+        setDefinition(data.definition);
+      } else {
+        setDefinition({
+          word,
+          reading: "",
+          meanings: ["No definition found."]
+        });
+      }
     } catch (error) {
       console.error("Error fetching definition:", error);
       toast.error("Failed to fetch definition.");
@@ -222,7 +230,7 @@ export default function Home() {
         <h2 className="text-xl font-semibold mb-2">Generated Sentence</h2>
         {loading ? (
           <p
-            style={{ color: "var(--foreground-secondary)" }}
+            style={{ background: "var(--clickable-bg)", color: "var(--foreground-secondary)" }}
             className="italic"
           >
             Generating sentence...
@@ -273,9 +281,13 @@ export default function Home() {
               <p><strong>Reading:</strong> {definition.reading}</p>
               <p><strong>Meaning(s):</strong></p>
               <ul className="list-disc list-inside ml-4">
-                {definition.meanings.map((meaning, index) => (
-                  <li key={index}>{meaning}</li>
-                ))}
+                {Array.isArray(definition.meanings) ? (
+                  definition.meanings.map((meaning, index) => (
+                    <li key={index}>{meaning}</li>
+                  ))
+                ) : (
+                  <li>No meanings found.</li>
+                )}
               </ul>
 
               {/* Add to Notebook button */}
@@ -308,6 +320,7 @@ export default function Home() {
             onChange={(e) => setSearchQuery(e.target.value)}
             placeholder="Search by kanji, kana, romaji, or meaning..."
             className="w-full sm:w-1/2 px-3 py-2 border rounded focus:outline-none focus:ring focus:border-blue-300"
+            style={{ background: "var(--input-bg)", color: "var(--foreground)" }}
           />
         </div>
 
@@ -389,14 +402,9 @@ export default function Home() {
                 )}
                 <div
                   className={`
-                    relative
-                    w-full
-                    h-full
-                    transition-transform
-                    duration-500
-                    transform
+                    relative w-full h-full
                     transform-style-preserve-3d
-                    ${flippedCards[entry.id] ? 'rotate-y-180' : ''}
+                    ${flippedCards[entry.id] ? 'flip-horizontal-top' : 'flip-horizontal-bottom'}
                   `}
                   style={{ background: "var(--card-bg)" }}
                 >
@@ -438,7 +446,7 @@ export default function Home() {
                       shadow-sm
                       text-center
                     "
-                    style={{ background: "var(--card-bg)" }}
+                    style={{ background: "var(--card-bg)", transform: 'rotateX(180deg)' }}
                   >
                     <p className="font-semibold text-lg">{entry.word}</p>
                     <p className="text-sm">Kana: {entry.kana}</p>

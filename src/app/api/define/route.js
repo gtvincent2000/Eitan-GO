@@ -21,9 +21,11 @@ export async function POST(request) {
         const wordText = entry.japanese[0].word || word; // Fallback to the original word if no word is found
 
         return Response.json({
-            word: wordText,
-            reading,
-            meanings,
+            definition: {
+                word: wordText,
+                reading,
+                meanings,
+            },
         });
     } catch (error) {
         console.error("Definition fetch error:", error);

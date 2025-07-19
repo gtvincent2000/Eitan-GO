@@ -81,3 +81,20 @@ Friday July 11th 2025:
 
     What's Next: I will either begin building the Home Page to create a clean landing for Eitan-GO or begin the Translation Page to implement the AI-powered parsing and translation feature.
                  After adding one of these pages, I will focus on fine-tuning and testing the Vocabulary Notebook, Flashcard Mode, and Quiz Mode to ensure everything is polished, consistent, and bug-free before moving forward.
+
+Saturday July 19th 2025:
+    What I Worked On:
+        Over the last week I:
+        - Added a fully functional translation page that detects the user input as either English or Japanese and makes an OpenAI API call to handle the translation.
+        - Implemented a definition dropdown on the Japanese translation, with the ability for the user to add clicked words to their vocabulary notebook.
+        - Revamped the styling for various features such as light mode and buttons.
+        - Overhauled and further gamified the UI on the study page.
+        
+    What I Struggled With: The most challenging part of the last week was perfecting the system prompt for the OpenAI API call for the translation. Other than that, there were some minor conflicts with styling.
+
+    What I learned:
+        - How to break React features into clean and reusable components.
+        - How to implement advanced animations using custom keyframes and Framer Motion to enhance interactivity.
+        - Enhanced use of OpenAI’s API by refining prompt engineering for precise segmentation and translation behavior, and integrating real-time Supabase updates for saving vocab.
+        - Developed a stronger eye for production-ready UI such as layered backgrounds, subtle shadows, typography spacing, and accessible interactive elements.
+

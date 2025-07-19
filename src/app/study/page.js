@@ -122,24 +122,36 @@ export default function StudyPage() {
 
                     {/* Mode selection panel */}
                     {studyMode === null && (
-                        <div className="flex flex-wrap gap-2 items-center justify-center mt-4">
+                        <div className="flex flex-row items-center justify-center h-[70vh] gap-6">
                             <button
                                 onClick={() => setStudyMode('flashcard')}
                                 className="
-                                px-4 py-2 rounded transition-colors duration-300
-                                bg-blue-600 text-white hover:bg-blue-700
+                                  pulsate-fwd
+                                  w-40 h-40
+                                  flex flex-col justify-center items-center text-center
+                                  text-xl font-bold
+                                  rounded-xl shadow-lg
+                                  bg-blue-600 text-white hover:bg-blue-700
+                                  transition-transform duration-300 transform hover:scale-105
                                 "
-                            >
-                                Flashcard Mode
+                                >
+                                    <span>Flashcard</span>
+                                    <span>Mode</span>
                             </button>
                             <button
                                 onClick={() => setStudyMode('quiz')}
                                 className="
-                                    px-4 py-2 rounded transition-colors duration-300
-                                bg-green-600 text-white hover:bg-green-700
+                                  pulsate-fwd
+                                  w-40 h-40
+                                  flex flex-col justify-center items-center text-center
+                                  text-xl font-bold
+                                  rounded-xl shadow-lg
+                                  bg-green-600 text-white hover:bg-green-700
+                                  transition-transform duration-300 transform hover:scale-105
                                 "
-                            >
-                                Quiz Mode
+                                >
+                                    <span>Quiz</span>
+                                    <span>Mode</span>
                             </button>
                         </div>
                     )}
@@ -183,47 +195,53 @@ export default function StudyPage() {
                                 <div
                                     className={`
                                     transition-transform duration-500 transform transform-style-preserve-3d w-full h-full
-                                    ${showAnswer ? 'rotate-y-180' : ''}
+                                    ${showAnswer ? 'flip-horizontal-top' : 'flip-horizontal-bottom'}
                                     `}
                                 >
                                     {/* Front Face */}
                                     <div
-                                    className="
-                                        absolute inset-0
-                                        backface-hidden
-                                        flex flex-col justify-center items-center gap-2
-                                        rounded shadow
-                                        p-4
-                                        text-center
-                                    "
-                                    style={{ background: "var(--card-bg)", color: "var(--foreground)", border: "1px solid var(--card-border)" }}
+                                        className="
+                                            absolute inset-0
+                                            backface-hidden
+                                            flex flex-col justify-center items-center gap-2
+                                            rounded shadow
+                                            p-4
+                                            text-center
+                                        "
+                                        style={{ background: "var(--card-bg)", color: "var(--foreground)", border: "1px solid var(--card-border)" }}
                                     >
-                                    <p className="text-3xl font-bold">{shuffledVocabList[currentIndex].word}</p>
+                                        <p className="text-3xl font-bold">{shuffledVocabList[currentIndex].word}</p>
                                     </div>
 
                                     {/* Back Face */}
                                     <div
-                                    className="
-                                        absolute inset-0
-                                        backface-hidden rotate-y-180
-                                        flex flex-col justify-center items-center gap-2
-                                        rounded shadow
-                                        p-4
-                                        text-center
-                                    "
-                                    style={{ background: "var(--card-bg)", color: "var(--foreground)" }}
+                                        className="
+                                          absolute
+                                          inset-0
+                                          backface-hidden
+                                          flex
+                                          flex-col
+                                          items-center
+                                          justify-center
+                                          p-4
+                                          border
+                                          rounded-lg
+                                          shadow-sm
+                                          text-center
+                                        "
+                                        style={{ background: "var(--card-bg)", color: "var(--foreground)", transform: "rotateX(180deg)" }}
                                     >
-                                    <p className="text-xl font-bold">{shuffledVocabList[currentIndex].kana}</p>
-                                    <p className="text-lg">{shuffledVocabList[currentIndex].romaji}</p>
-                                    <ul className="text-sm list-disc list-inside">
-                                        {shuffledVocabList[currentIndex].meanings && shuffledVocabList[currentIndex].meanings.length > 0 ? (
-                                        shuffledVocabList[currentIndex].meanings.map((meaning, idx) => (
-                                            <li key={idx}>{meaning}</li>
-                                        ))
-                                        ) : (
-                                        <li>No meanings saved.</li>
-                                        )}
-                                    </ul>
+                                        <p className="text-xl font-bold">{shuffledVocabList[currentIndex].kana}</p>
+                                        <p className="text-lg">{shuffledVocabList[currentIndex].romaji}</p>
+                                        <ul className="text-sm list-disc list-inside">
+                                            {shuffledVocabList[currentIndex].meanings && shuffledVocabList[currentIndex].meanings.length > 0 ? (
+                                            shuffledVocabList[currentIndex].meanings.map((meaning, idx) => (
+                                                <li key={idx}>{meaning}</li>
+                                            ))
+                                            ) : (
+                                            <li>No meanings saved.</li>
+                                            )}
+                                        </ul>
                                     </div>
                                 </div>
                             </div>

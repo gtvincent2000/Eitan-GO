@@ -66,7 +66,9 @@ const WordInput = ({ word, setWord, setSentence, setTranslation, loading, setLoa
 
       const defData = await defRes.json();
       console.log("Definition data:", defData);
-      setDefinition(defData);
+      if (defData && defData.definition) {
+        setDefinition(defData.definition);
+      }
 
     } catch (error) {
       console.error("Error generating sentence:", error);
@@ -84,7 +86,9 @@ const WordInput = ({ word, setWord, setSentence, setTranslation, loading, setLoa
 
 
   return (
-    <div className="flex flex-col gap-4 items-start">
+    <div className="flex flex-col gap-4 items-start"
+      style={{ background: "var(--background)", color: "var(--foreground)" }}
+    >
       <label htmlFor="word-input" className="text-lg font-semibold">Enter a word:</label>
       <input
         type="text"
@@ -97,10 +101,7 @@ const WordInput = ({ word, setWord, setSentence, setTranslation, loading, setLoa
           color: "var(--foreground)"
         }}
       />
-      <button
-        onClick={handleSubmit}
-        className="bg-blue-600 hover:bg-blue-700 text-white font-semibold px-4 py-2 rounded"
-      >
+      <button onClick={handleSubmit} className="button-theme px-4 py-2 rounded font-semibold">
         Submit
       </button>
 

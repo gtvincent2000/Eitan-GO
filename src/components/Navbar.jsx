@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect, useRef } from "react";
+import { motion, AnimatePresence } from "framer-motion";
 import Link from "next/link";
 
 export default function Navbar() {
@@ -58,55 +59,92 @@ export default function Navbar() {
           <span className="text-lg font-semibold text-gray-800 dark:text-gray-200">E</span>
         </button>
 
-        {dropdownOpen && (
-          <div className="absolute right-0 mt-2 w-48 bg-white dark:bg-gray-800 rounded shadow-md z-50 p-2">
-            <div className="flex flex-col gap-2 p-2">
+        <AnimatePresence>
+          {dropdownOpen && (
+            <motion.div
+              initial={{ opacity: 0, y: -10 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -10 }}
+              transition={{ duration: 0.2 }}
+              className="absolute right-0 mt-2 w-48 rounded shadow-md z-50 p-2 border"
+              style={{
+                background: "var(--dropdown-bg)",
+                color: "var(--foreground)",
+              }}
+            >
+              <div className="flex flex-col gap-2 p-2">
+                {/* Navigation Buttons */}
+                <Link href="/" className="hover:text-blue-500">
+                  <button
+                    className="w-full text-left px-2 py-1 rounded transition-colors duration-200"
+                    style={{
+                      background: "transparent",
+                    }}
+                    onMouseEnter={(e) => {
+                      e.currentTarget.style.background = "var(--nav-clickable-hover)";
+                    }}
+                    onMouseLeave={(e) => {
+                      e.currentTarget.style.background = "transparent";
+                    }}
+                  >
+                    Vocab Notebook
+                  </button>
+                </Link>
+                <Link href="/translate" className="hover:text-blue-500">
+                  <button
+                    className="w-full text-left px-2 py-1 rounded transition-colors duration-200"
+                    style={{
+                      background: "transparent",
+                    }}
+                    onMouseEnter={(e) => {
+                      e.currentTarget.style.background = "var(--nav-clickable-hover)";
+                    }}
+                    onMouseLeave={(e) => {
+                      e.currentTarget.style.background = "transparent";
+                    }}
+                  >
+                    Translate
+                  </button>
+                </Link>
+                <Link href="/study" className="hover:text-blue-500">
+                  <button
+                    className="w-full text-left px-2 py-1 rounded transition-colors duration-200"
+                    style={{
+                      background: "transparent",
+                    }}
+                    onMouseEnter={(e) => {
+                      e.currentTarget.style.background = "var(--nav-clickable-hover)";
+                    }}
+                    onMouseLeave={(e) => {
+                      e.currentTarget.style.background = "transparent";
+                    }}
+                  >
+                    Study
+                  </button>
+                </Link>
 
-            {/* Navigation */}
-            <Link href="/" className="text-gray-800 dark:text-gray-200 hover:text-blue-600 dark:hover:text-blue-400">
-                <button
-                  className="w-full text-left px-2 py-1 rounded hover:bg-gray-200 dark:hover:bg-gray-700"
-                >
-                  Vocab Notebook
-                </button>
-            </Link>
-            <Link href="/study" className="text-gray-800 dark:text-gray-200 hover:text-blue-600 dark:hover:text-blue-400">
-                <button
-                  className="w-full text-left px-2 py-1 rounded hover:bg-gray-200 dark:hover:bg-gray-700"
-                >
-                  Study
-                </button>
-            </Link>
-            
-              <div className= "flex items-center justify-between p-2">
-                <span className="text-sm text-gray-700 dark:text-gray-300">Theme</span>
-                <button
-                  onClick={toggleDarkMode}
-                  className={`relative inline-flex h-6 w-12 items-center rounded-full transition-colors duration-300 ${
-                    darkMode ? 'bg-blue-800' : 'bg-pink-200'
-                  }`}
-                >
-                  {/* Sun Icon - Left */}
-                  <span className="absolute left-1 text-xs">
-                    🌙
-                  </span>
-
-                  {/* Moon Icon - Right */}
-                  <span className="absolute right-1 text-xs">
-                    ☀️
-                  </span>
-
-                  {/* Slider circle */}
-                  <span
-                    className={`inline-block h-5 w-5 transform rounded-full bg-white shadow transition-transform duration-300 ${
-                      darkMode ? 'translate-x-6' : 'translate-x-1'
+                {/* Theme Toggle */}
+                <div className="flex items-center justify-between p-2">
+                  <span className="text-sm">Theme</span>
+                  <button
+                    onClick={toggleDarkMode}
+                    className={`relative inline-flex h-6 w-12 items-center rounded-full transition-colors duration-300 ${
+                      darkMode ? "bg-blue-800" : "bg-yellow-200"
                     }`}
-                  />
-                </button>
-              </div>  
-            </div>
-          </div>
-        )}
+                  >
+                    <span className="absolute left-1 text-xs">🌙</span>
+                    <span className="absolute right-1 text-xs">☀️</span>
+                    <span
+                      className={`inline-block h-5 w-5 transform rounded-full bg-white shadow transition-transform duration-300 ${
+                        darkMode ? "translate-x-6" : "translate-x-1"
+                      }`}
+                    />
+                  </button>
+                </div>
+              </div>
+            </motion.div>
+          )}
+        </AnimatePresence>
       </div>
     </nav>
   );
