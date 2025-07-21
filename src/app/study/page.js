@@ -102,7 +102,7 @@ export default function StudyPage() {
                 origin: { y: 0.6 },
             });
         }
-    }, [sessionComplete]);
+    }, [sessionComplete, percentage]);
 
 
 

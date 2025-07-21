@@ -58,7 +58,7 @@ export default function LandingPage() {
       >
           <h2 className="text-3xl font-bold mb-4">Your Progress</h2>
           <p className="text-[var(--foreground-secondary)] mb-8 max-w-xl mx-auto">
-            Soon you'll be able to track your study streaks and saved vocab history!
+            Study Streaks and Vocab Stats coming soon! This is a placeholder for your personal stats.
           </p>
           <div className="flex flex-wrap justify-center gap-6">
             <div className="p-4 rounded-lg shadow bg-[var(--card-bg)] w-48">
