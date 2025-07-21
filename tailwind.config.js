@@ -10,3 +10,15 @@ module.exports = {
   },
   plugins: [],
 };
+
+module.exports = {
+  theme: {
+    extend: {},
+  },
+  variants: {
+    extend: {
+      scale: ['portrait'],
+    },
+  },
+  plugins: [],
+};
