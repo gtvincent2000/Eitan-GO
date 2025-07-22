@@ -3,11 +3,33 @@
 import { useState, useEffect, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import Link from "next/link";
+import AuthButton from "./AuthButton";
+import { supabase } from "../lib/supabaseClient";
+
 
 export default function Navbar() {
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const [darkMode, setDarkMode] = useState(false);
   const dropdownRef = useRef();
+  const [user, setUser] = useState(null);
+
+  useEffect(() => {
+    const getUser = async () => {
+      const { data: { session } } = await supabase.auth.getSession();
+      setUser(session?.user || null);
+    };
+
+    getUser();
+
+    const { data: listener } = supabase.auth.onAuthStateChange((_event, session) => {
+      setUser(session?.user || null);
+    });
+
+    return () => {
+      listener.subscription.unsubscribe();
+    };
+  }, []);
+
 
   useEffect(() => {
     const handleClickOutside = (event) => {
@@ -53,10 +75,14 @@ export default function Navbar() {
       <div className="relative" ref={dropdownRef}>
         <button
           onClick={() => setDropdownOpen(!dropdownOpen)}
-          className="h-10 w-10 rounded-full bg-gray-300 dark:bg-gray-700 flex items-center justify-center"
+          className="h-10 w-10 rounded-full overflow-hidden flex items-center justify-center border border-gray-400 dark:border-gray-600"
           aria-label="Open dropdown menu"
         >
-          <span className="text-lg font-semibold text-gray-800 dark:text-gray-200">E</span>
+          {user && user.user_metadata?.avatar_url ? (
+            <img src={user.user_metadata.avatar_url} alt="User Avatar" className="h-full w-full object-cover" />
+          ) : (
+            <span className="text-lg font-semibold text-gray-800 dark:text-gray-200">👤</span>
+          )}
         </button>
 
         <AnimatePresence>
@@ -157,6 +183,9 @@ export default function Navbar() {
                     />
                   </button>
                 </div>
+
+                {/* Auth Button */}
+                <AuthButton />
               </div>
             </motion.div>
           )}

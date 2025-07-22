@@ -3,6 +3,7 @@
 import { use, useEffect, useState } from 'react';
 import { supabase } from '@/lib/supabaseClient';
 import confetti from 'canvas-confetti';
+import toast from 'react-hot-toast';
 
 export default function StudyPage() {
 
@@ -47,9 +48,22 @@ export default function StudyPage() {
     useEffect(() => {
         const fetchVocab = async () => {
             setLoading(true);
+
+            const { data: { user } } = await supabase.auth.getUser();
+            if (!user) {
+                console.warn("User not signed in");
+                toast.error("Please sign in to access your study materials.");
+                setVocabList([]); // Clear vocab list if not signed in
+                setLoading(false);
+                return;
+            }
+
+            const userId = user.id;
+
             const { data, error } = await supabase
                 .from('vocab')
                 .select('*')
+                .eq('user_id', userId)
                 .order('created_at', { ascending: false });
 
             if (error) {
@@ -57,6 +71,7 @@ export default function StudyPage() {
             } else {
                 setVocabList(data);
             }
+
             setLoading(false);
         };
 
@@ -124,7 +139,13 @@ export default function StudyPage() {
                     {studyMode === null && (
                         <div className="flex flex-row items-center justify-center h-[70vh] gap-6">
                             <button
-                                onClick={() => setStudyMode('flashcard')}
+                                onClick={() => {
+                                    if (!vocabList || vocabList.length < 3) {
+                                                toast.error("You need at least 3 saved words to study flashcards!");
+                                                return;
+                                            }
+                                    setStudyMode('flashcard');
+                                }}
                                 className="
                                   pulsate-fwd
                                   w-40 h-40
@@ -446,17 +467,23 @@ export default function StudyPage() {
                                 </>
                             ) : (
                                 <>
-                                    {/* Placeholder Content */}
+                                    {/* Quiz Mode Selection */}
                                     <h2 className="text-2xl font-bold mb-4">Quiz Mode</h2>
                                     <p className="text-center mb-4">Prepare to test your vocabulary knowledge!</p>
                                     <button
                                         className="px-4 py-2 rounded bg-blue-600 text-white hover:bg-blue-700 transition"
                                         onClick={() => {
+                                            if (!vocabList || vocabList.length < 3) {
+                                                toast.error("You need at least 3 saved words to start a quiz!");
+                                                return;
+                                            }
                                             const generatedQuestions = generateQuizQuestions(vocabList, 10);
                                             setQuizQuestions(generatedQuestions);
                                             setCurrentQuizIndex(0);
                                             setScore(0);
                                             setQuizStarted(true);
+                                            console.log("Button clicked");
+                                            console.log("Vocab List:", vocabList);
                                         }}
                                     >
                                         Start Quiz
@@ -524,24 +551,46 @@ export default function StudyPage() {
 }
 
 // Function to generate quiz questions
-function generateQuizQuestions(vocabList, count) {
+function generateQuizQuestions(vocabList, desiredCount) {
   const questions = [];
   const usedIndices = new Set();
 
-  const getRandom = (arr) => arr[Math.floor(Math.random() * arr.length)];
+  const getRandom = (arr) =>
+    Array.isArray(arr) && arr.length > 0
+      ? arr[Math.floor(Math.random() * arr.length)]
+      : null;
 
-  while (questions.length < count && usedIndices.size < vocabList.length) {
-    const index = Math.floor(Math.random() * vocabList.length);
+  // Step 1: Filter only valid vocab entries
+  const validVocab = vocabList.filter(
+    (entry) =>
+      entry.word &&
+      entry.kana &&
+      Array.isArray(entry.meanings) &&
+      entry.meanings.length > 0
+  );
+
+  // Step 2: Determine safe question count
+  const count = Math.min(desiredCount, validVocab.length);
+
+  // Step 3: Prevent infinite loops
+  let attempts = 0;
+  const maxAttempts = 1000;
+
+  while (questions.length < count && attempts < maxAttempts) {
+    attempts++;
+
+    const index = Math.floor(Math.random() * validVocab.length);
     if (usedIndices.has(index)) continue;
 
+    const entry = validVocab[index];
     usedIndices.add(index);
-    const entry = vocabList[index];
+    if (!entry) continue;
 
     const questionType = getRandom([
       "kanjiToMeaning",
       "meaningToKanji",
       "kanjiToKana",
-      "kanaToKanji"
+      "kanaToKanji",
     ]);
 
     let prompt = "";
@@ -549,65 +598,69 @@ function generateQuizQuestions(vocabList, count) {
     let choices = [];
 
     if (questionType === "kanjiToMeaning") {
-      prompt = `What is the meaning of ${entry.word} (${entry.kana})?`;
       correctAnswer = getRandom(entry.meanings);
+      prompt = `What is the meaning of ${entry.word} (${entry.kana})?`;
       choices = [correctAnswer];
-      while (choices.length < 4) {
-        const distractorEntry = getRandom(vocabList);
-        const distractorMeaning = getRandom(distractorEntry.meanings);
-        if (!choices.includes(distractorMeaning)) {
-          choices.push(distractorMeaning);
+
+      while (choices.length < 4 && choices.length < validVocab.length) {
+        const distractorEntry = getRandom(validVocab);
+        const distractor = getRandom(distractorEntry.meanings);
+        if (distractor && !choices.includes(distractor)) {
+          choices.push(distractor);
         }
       }
     } else if (questionType === "meaningToKanji") {
       const meaning = getRandom(entry.meanings);
-      prompt = `Which kanji represents "${meaning}"?`;
       correctAnswer = `${entry.word} (${entry.kana})`;
+      prompt = `Which kanji represents "${meaning}"?`;
       choices = [correctAnswer];
-      while (choices.length < 4) {
-        const distractorEntry = getRandom(vocabList);
+
+      while (choices.length < 4 && choices.length < validVocab.length) {
+        const distractorEntry = getRandom(validVocab);
         const distractor = `${distractorEntry.word} (${distractorEntry.kana})`;
-        if (!choices.includes(distractor)) {
+        if (distractor && !choices.includes(distractor)) {
           choices.push(distractor);
         }
       }
     } else if (questionType === "kanjiToKana") {
-      prompt = `What is the reading of ${entry.word}?`;
       correctAnswer = entry.kana;
+      prompt = `What is the reading of ${entry.word}?`;
       choices = [correctAnswer];
-      while (choices.length < 4) {
-        const distractorEntry = getRandom(vocabList);
-        const distractor = distractorEntry.kana;
-        if (!choices.includes(distractor)) {
+
+      while (choices.length < 4 && choices.length < validVocab.length) {
+        const distractor = getRandom(validVocab)?.kana;
+        if (distractor && !choices.includes(distractor)) {
           choices.push(distractor);
         }
       }
     } else if (questionType === "kanaToKanji") {
-      prompt = `Which kanji corresponds to "${entry.kana}"?`;
       correctAnswer = entry.word;
+      prompt = `Which kanji corresponds to "${entry.kana}"?`;
       choices = [correctAnswer];
-      while (choices.length < 4) {
-        const distractorEntry = getRandom(vocabList);
-        const distractor = distractorEntry.word;
-        if (!choices.includes(distractor)) {
+
+      while (choices.length < 4 && choices.length < validVocab.length) {
+        const distractor = getRandom(validVocab)?.word;
+        if (distractor && !choices.includes(distractor)) {
           choices.push(distractor);
         }
       }
     }
 
-    // Shuffle choices:
+    // Shuffle choices
     choices = choices.sort(() => Math.random() - 0.5);
 
     questions.push({
       prompt,
       choices,
       correctAnswer,
-      type: questionType
+      type: questionType,
     });
+  }
 
-    console.log("Generated quiz questions:", questions);
+  if (attempts >= maxAttempts) {
+    console.warn("Quiz generation stopped after hitting maxAttempts.");
   }
 
   return questions;
-  
 }
+

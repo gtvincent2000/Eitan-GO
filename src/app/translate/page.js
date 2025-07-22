@@ -14,11 +14,17 @@ const supabase = createClient(
 async function saveWordToNotebook(definition) {
   const { word, reading, meanings } = definition;
 
-  // Optional: Check if word already exists
+  const { data: { user } } = await supabase.auth.getUser();
+  if (!user) return { error: "User not signed in" };
+
+  const userId = user.id;
+
+  // Check if word already exists for that user
   const { data: existing, error: existingError } = await supabase
     .from("vocab")
     .select("id")
     .eq("word", word)
+    .eq("user_id", userId)
     .single();
 
   if (existing) {
@@ -31,6 +37,7 @@ async function saveWordToNotebook(definition) {
       kana: reading,
       romaji: wanakana.toRomaji(reading),
       meanings,
+      user_id: userId,
     },
   ]);
 

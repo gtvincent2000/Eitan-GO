@@ -61,48 +61,49 @@ export default function Home() {
     const toastId = toast.loading("Fetching definition...");
 
     try {
-      // Fetch definition with reading
+      const { data: { user } } = await supabase.auth.getUser();
+      if (!user) {
+        toast.dismiss(toastId); 
+        toast.error("You must be signed in to save words.");
+        return;
+      }
+
+      const userId = user.id;
+
       const res = await fetch("/api/define", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ word }),
       });
-      const data = await res.json();
+      const { definition } = await res.json();
 
-      if (!data.meanings || data.meanings.length === 0) {
-        toast.error("No meanings found for this word.", { id: toastId });
+      if (!definition || !definition.word || !definition.meanings) {
+        toast.error("Invalid definition received.", { id: toastId });
         return;
       }
 
-      // Use fetched kana reading and romaji
-      const kana = data.reading || "";
+      const kana = definition.reading || "";
       const romaji = kana ? wanakana.toRomaji(kana) : "";
 
-      // Check for existing entry
-      const { data: existing, error: fetchError } = await supabase
+      const { data: existing } = await supabase
         .from("vocab")
         .select("*")
-        .eq("word", data.word) // use returned kanji word for consistency
+        .eq("word", definition.word)
+        .eq("user_id", userId)
         .maybeSingle();
 
-      if (fetchError) {
-        toast.error("Error checking notebook.", { id: toastId });
-        console.error(fetchError.message);
-        return;
-      }
-
       if (existing) {
-        toast.error(`"${data.word}" is already in your notebook!`, { id: toastId });
+        toast.error(`"${definition.word}" is already in your notebook!`, { id: toastId });
         return;
       }
 
-      // Insert into Supabase
       const { error } = await supabase.from("vocab").insert([
         {
-          word: data.word, // kanji word
+          word: definition.word,
           kana,
           romaji,
-          meanings: data.meanings,
+          meanings: definition.meanings,
+          user_id: userId,
         },
       ]);
 
@@ -111,20 +112,24 @@ export default function Home() {
         console.error(error.message);
       } else {
         toast.success("Word saved to notebook!", { id: toastId });
-        fetchVocabList(); // Refresh notebook
+        fetchVocabList();
       }
     } catch (error) {
-      console.error("Error saving word with meanings:", error);
+      console.error("Error saving word:", error);
       toast.error("Failed to save word.", { id: toastId });
     }
   };
 
   // Function to fetch the vocabulary list from Supabase
   const fetchVocabList = async () => {
-    const { data, error } = await supabase
-      .from("vocab")
-      .select("*")
-      .order("created_at", { ascending: false });
+    const { data: { user } } = await supabase.auth.getUser();
+      if (!user) return;
+
+      const { data, error } = await supabase
+        .from("vocab")
+        .select("*")
+        .eq("user_id", user.id)
+        .order("created_at", { ascending: false });
 
       if (error) {
         console.error("Error fetching vocab list:", error.message);
@@ -136,11 +141,11 @@ export default function Home() {
 
   // Function to filter the vocabulary list based on the search query
   const filteredVocabList = vocabList.filter((entry) => {
-    const query = searchQuery.toLowerCase();
+  const query = (searchQuery || "").toLowerCase();
     return (
-      entry.word.toLowerCase().includes(query) ||
-      entry.kana.toLowerCase().includes(query) ||
-      entry.romaji.toLowerCase().includes(query) ||
+      (entry.word && entry.word.toLowerCase().includes(query)) ||
+      (entry.kana && entry.kana.toLowerCase().includes(query)) ||
+      (entry.romaji && entry.romaji.toLowerCase().includes(query)) ||
       (entry.meanings && entry.meanings.some(m => m.toLowerCase().includes(query)))
     );
   });
@@ -365,14 +370,13 @@ export default function Home() {
         {/* Conditional rendering for message OR list */}
         {vocabList.length === 0 ? (
           <p className="text-gray-600">Your notebook is empty. Click words in the sentence above to add them!</p>
-        ) : filteredVocabList.length === 0 ? (
-          <p className="text-gray-600">No results found for &quot;{searchQuery}&quot;.</p>
         ) : (
-          <ul className={
-            viewMode === 'grid'
-              ? "grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4"
-              : "flex flex-col gap-4"
-          }>
+          filteredVocabList.length > 0 ? (
+            <ul className={
+              viewMode === 'grid'
+                ? "grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4"
+                : "flex flex-col gap-4"
+            }>
           {/* Render vocabulary entries */}
             {filteredVocabList.map((entry) => (
               <li
@@ -466,6 +470,13 @@ export default function Home() {
               </li>
             ))}
           </ul>
+          ) : (
+            searchQuery ? (
+              <p className="text-gray-600">No results found for &quot;{searchQuery}&quot;.</p>
+            ) : (
+              null 
+            )
+          )
         )}
       </section>
 
