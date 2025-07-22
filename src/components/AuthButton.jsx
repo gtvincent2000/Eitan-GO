@@ -23,7 +23,12 @@ export default function AuthButton() {
   }, []);
 
   const handleLogin = async () => {
-    const { error } = await supabase.auth.signInWithOAuth({ provider: "google" });
+    const { error } = await supabase.auth.signInWithOAuth({
+      provider: "google",
+      options: {
+        redirectTo: `${window.location.origin}/api/auth/callback`,  // Dynamically handles Vercel vs localhost
+      },
+    });
     if (error) console.error("Login error:", error.message);
   };
 
