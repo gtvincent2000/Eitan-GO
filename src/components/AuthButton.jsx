@@ -23,12 +23,18 @@ export default function AuthButton() {
   }, []);
 
   const handleLogin = async () => {
+    const redirectTo =
+      typeof window !== "undefined" && window.location.hostname === "localhost"
+        ? "http://localhost:3000/"
+        : "https://eitan-go.vercel.app/";
+
     const { error } = await supabase.auth.signInWithOAuth({
       provider: "google",
       options: {
-        redirectTo: `${window.location.origin}/api/auth/callback`,  // Dynamically handles Vercel vs localhost
+        redirectTo,
       },
     });
+
     if (error) console.error("Login error:", error.message);
   };
 
