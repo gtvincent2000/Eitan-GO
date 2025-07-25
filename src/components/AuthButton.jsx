@@ -24,15 +24,17 @@ export default function AuthButton() {
 
   const handleLogin = async () => {
     const redirectTo = typeof window !== 'undefined'
-      ? `${window.location.origin}/api/auth/callback`
-      : undefined;
+      ? `${window.location.origin}/auth/callback`
+      : '/auth/callback';
 
     const { error } = await supabase.auth.signInWithOAuth({
-      provider: "google",
-      options: { redirectTo },
+      provider: 'google',
+      options: {
+        redirectTo,
+      },
     });
 
-    if (error) console.error("Login error:", error.message);
+    if (error) console.error('Login error:', error.message);
   };
 
   const handleLogout = async () => {
