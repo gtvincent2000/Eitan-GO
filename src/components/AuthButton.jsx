@@ -23,15 +23,13 @@ export default function AuthButton() {
   }, []);
 
   const handleLogin = async () => {
-    const redirectTo = typeof window !== "undefined" && window.location.origin
+    const redirectTo = typeof window !== 'undefined'
       ? `${window.location.origin}/api/auth/callback`
-      : "https://eitan-go.vercel.app/api/auth/callback";
+      : undefined;
 
     const { error } = await supabase.auth.signInWithOAuth({
       provider: "google",
-      options: {
-        redirectTo,
-      },
+      options: { redirectTo },
     });
 
     if (error) console.error("Login error:", error.message);
