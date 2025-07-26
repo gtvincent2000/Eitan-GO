@@ -2,55 +2,87 @@
 
 import Link from "next/link";
 import { motion, useScroll, useTransform } from "framer-motion";
-import { useRef } from "react";
+import { useEffect, useState, useRef } from "react";
+import { supabase } from "@/lib/supabaseClient";
 import FadeInOnCenter from "../components/FadeInOnCenter";
 
 export default function LandingPage() {
-    const heroRef = useRef(null);
-    const { scrollYProgress } = useScroll({
-      target: heroRef,
-      offset: ['start end', 'end start']
-    });
-    const opacity = useTransform(scrollYProgress, [0, 1], [1, 0]);
-    const opacityText = useTransform(scrollYProgress, [0, 1], [1, 0.4]);
-    const y = useTransform(scrollYProgress, [0, 1], [0, -100]);
 
-    return (
-      <main style={{ background: "var(--background)", color: "var(--foreground)" }}>
-        
-        <section className="relative h-screen">
-          {/* The background image stays fixed */}
-          <motion.img
-            src="../assets/eitango-banner-7.jpg"
-            alt="Eitan-GO Banner"
-            className="fixed top-0 left-0 w-full h-screen object-cover object-center z-0"
-            style={{ opacity }}
-          />
-          {/* Optional overlay */}
-          <div className="fixed top-0 left-0 w-full h-screen z-10 pointer-events-none bg-gradient-to-b from-transparent to-[var(--background)]" />
-        </section>
+  const [stats, setStats] = useState({
+    saved_word_count: 0,
+    daily_study_streak: 0,
+    total_study_sessions: 0,
+  });
+  
+  const heroRef = useRef(null);
+  const { scrollYProgress } = useScroll({
+    target: heroRef,
+    offset: ['start end', 'end start']
+  });
+  const opacity = useTransform(scrollYProgress, [0, 1], [1, 0]);
+  const opacityText = useTransform(scrollYProgress, [0, 1], [1, 0.4]);
+  const y = useTransform(scrollYProgress, [0, 1], [0, -100]);
 
-        {/* Hero Text Slides Up Over Image */}
-        <motion.section
-          ref={heroRef}
-          className="relative z-20 min-h-[70vh] -mt-[60vh] flex flex-col items-center justify-center text-center px-4"
-        >
-          <motion.div style={{ y, opacity: opacityText }}>
-            <div className="max-w-3xl">
-              <h1 className="text-4xl sm:text-6xl font-extrabold mb-4">
-                Master Japanese Vocabulary
-              </h1>
-              <p className="text-lg sm:text-xl mb-8 text-[var(--foreground-secondary)]">
-                AI-powered tools, translations, and a personalized study system.
-              </p>
-              <Link href="/translate">
-                <button className="button-theme px-6 py-3 rounded-xl text-lg font-semibold">
-                  Get Started
-                </button>
-              </Link>
-            </div>
-          </motion.div>
-        </motion.section>
+  // Fetch user stats from Supabase
+  useEffect(() => {
+    const fetchStats = async () => {
+      const { data: { user } } = await supabase.auth.getUser();
+      if (!user) return;
+
+      const { data, error } = await supabase
+        .from("user_stats")
+        .select("*")
+        .eq("user_id", user.id)
+        .single();
+
+      if (!error && data) {
+        setStats({
+          saved_word_count: data.saved_word_count || 0,
+          daily_study_streak: data.daily_study_streak || 0,
+          total_study_sessions: data.total_study_sessions || 0,
+        });
+      }
+    };
+
+    fetchStats();
+  }, []);
+
+  return (
+    <main style={{ background: "var(--background)", color: "var(--foreground)" }}>
+      
+      <section className="relative h-screen">
+        {/* The background image stays fixed */}
+        <motion.img
+          src="../assets/eitango-banner-7.jpg"
+          alt="Eitan-GO Banner"
+          className="fixed top-0 left-0 w-full h-screen object-cover object-center z-0"
+          style={{ opacity }}
+        />
+        {/* Optional overlay */}
+        <div className="fixed top-0 left-0 w-full h-screen z-10 pointer-events-none bg-gradient-to-b from-transparent to-[var(--background)]" />
+      </section>
+
+      {/* Hero Text Slides Up Over Image */}
+      <motion.section
+        ref={heroRef}
+        className="relative z-20 min-h-[70vh] -mt-[60vh] flex flex-col items-center justify-center text-center px-4"
+      >
+        <motion.div style={{ y, opacity: opacityText }}>
+          <div className="max-w-3xl">
+            <h1 className="text-4xl sm:text-6xl font-extrabold mb-4">
+              Master Japanese Vocabulary
+            </h1>
+            <p className="text-lg sm:text-xl mb-8 text-[var(--foreground-secondary)]">
+              AI-powered tools, translations, and a personalized study system.
+            </p>
+            <Link href="/translate">
+              <button className="button-theme px-6 py-3 rounded-xl text-lg font-semibold">
+                Get Started
+              </button>
+            </Link>
+          </div>
+        </motion.div>
+      </motion.section>
 
       {/* Stats Section */}
       <FadeInOnCenter
@@ -62,15 +94,15 @@ export default function LandingPage() {
           </p>
           <div className="flex flex-wrap justify-center gap-6">
             <div className="p-4 rounded-lg shadow bg-[var(--card-bg)] w-48">
-              <p className="text-2xl font-bold">✨ 0</p>
+              <p className="text-2xl font-bold">✨ {stats.saved_word_count}</p>
               <p className="text-sm text-[var(--foreground-secondary)]">Words Saved</p>
             </div>
             <div className="p-4 rounded-lg shadow bg-[var(--card-bg)] w-48">
-              <p className="text-2xl font-bold">🔥 0</p>
+              <p className="text-2xl font-bold">🔥 {stats.daily_study_streak}</p>
               <p className="text-sm text-[var(--foreground-secondary)]">Day Streak</p>
             </div>
             <div className="p-4 rounded-lg shadow bg-[var(--card-bg)] w-48">
-              <p className="text-2xl font-bold">🧪 0</p>
+              <p className="text-2xl font-bold">🧪 {stats.total_study_sessions}</p>
               <p className="text-sm text-[var(--foreground-secondary)]">Study Sessions</p>
             </div>
           </div>

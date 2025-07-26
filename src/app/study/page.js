@@ -22,6 +22,7 @@ export default function StudyPage() {
     const [score, setScore] = useState(0);
     const [selectedAnswer, setSelectedAnswer] = useState(null);
     const [feedback, setFeedback] = useState(null); // "correct" | "incorrect"
+    const [userStats, setUserStats] = useState(null);
 
     // Calculate Flashcard progress percentage
     const progress = ((currentIndex + 1) / vocabList.length) * 100;
@@ -119,7 +120,25 @@ export default function StudyPage() {
         }
     }, [sessionComplete, percentage]);
 
+    // Fetch user stats
+    useEffect(() => {
+        const fetchStats = async () => {
+            const { data: { user } } = await supabase.auth.getUser();
+            if (!user) return;
 
+            const { data, error } = await supabase
+                .from("user_stats")
+                .select("*")
+                .eq("user_id", user.id)
+                .single();
+
+            if (!error && data) {
+                setUserStats(data);
+            }
+        };
+
+        fetchStats();
+    }, []);
 
     return (
         <main className="min-h-screen p-6" style={{ background: "var(--background)", color: "var(--foreground)" }}>
@@ -134,7 +153,22 @@ export default function StudyPage() {
                     <p className="mt-4 text-sm" style={{ color: "var(--foreground-secondary)" }}>
                         You have {vocabList.length} words saved for study.
                     </p>
-
+                {studyMode === null && userStats && (
+                    <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 text-center mt-4 mb-6">
+                        <div className="bg-[var(--card-bg)] rounded p-4 shadow">
+                        <p className="text-xl font-bold">✨ {userStats.saved_word_count}</p>
+                        <p className="text-sm text-[var(--foreground-secondary)]">Words Saved</p>
+                        </div>
+                        <div className="bg-[var(--card-bg)] rounded p-4 shadow">
+                        <p className="text-xl font-bold">🔥 {userStats.daily_study_streak}</p>
+                        <p className="text-sm text-[var(--foreground-secondary)]">Daily Streak</p>
+                        </div>
+                        <div className="bg-[var(--card-bg)] rounded p-4 shadow">
+                        <p className="text-xl font-bold">🧪 {userStats.total_study_sessions}</p>
+                        <p className="text-sm text-[var(--foreground-secondary)]">Study Sessions</p>
+                        </div>
+                    </div>
+                )}
                     {/* Mode selection panel */}
                     {studyMode === null && (
                         <div className="flex flex-row items-center justify-center h-[70vh] gap-6">
