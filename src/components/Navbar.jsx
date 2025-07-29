@@ -63,13 +63,17 @@ export default function Navbar() {
   };
 
   return (
-    <nav className="flex justify-between items-center px-4 py-2 shadow sticky top-0 z-50"
+    <nav className="flex justify-between items-center px-4 py-2 shadow sticky top-0 z-50 font-sans"
      style={{ background: "var(--navbar-bg)", color: "var(--navbar-text)" }}>
       {/* Logo */}
-      <div className="flex items-center">
+      <Link href="/" className="flex items-center">
         <img src="/assets/eitango-logo-1_1.png" alt="Eitan-GO Logo" className="h-10 w-10 rounded" />
-      </div>
+      </Link>
 
+      {/* App Name */}
+      <div className="flex items-center justify-center flex-grow text-lg font-bold">
+        Eitan-GO
+      </div>
 
       {/* Dropdown */}
       <div className="relative" ref={dropdownRef}>

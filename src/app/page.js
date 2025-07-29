@@ -2,17 +2,10 @@
 
 import Link from "next/link";
 import { motion, useScroll, useTransform } from "framer-motion";
-import { useEffect, useState, useRef } from "react";
-import { supabase } from "@/lib/supabaseClient";
+import { useState, useRef } from "react";
 import FadeInOnCenter from "../components/FadeInOnCenter";
 
 export default function LandingPage() {
-
-  const [stats, setStats] = useState({
-    saved_word_count: 0,
-    daily_study_streak: 0,
-    total_study_sessions: 0,
-  });
   
   const heroRef = useRef(null);
   const { scrollYProgress } = useScroll({
@@ -23,32 +16,10 @@ export default function LandingPage() {
   const opacityText = useTransform(scrollYProgress, [0, 1], [1, 0.4]);
   const y = useTransform(scrollYProgress, [0, 1], [0, -100]);
 
-  // Fetch user stats from Supabase
-  useEffect(() => {
-    const fetchStats = async () => {
-      const { data: { user } } = await supabase.auth.getUser();
-      if (!user) return;
-
-      const { data, error } = await supabase
-        .from("user_stats")
-        .select("*")
-        .eq("user_id", user.id)
-        .single();
-
-      if (!error && data) {
-        setStats({
-          saved_word_count: data.saved_word_count || 0,
-          daily_study_streak: data.daily_study_streak || 0,
-          total_study_sessions: data.total_study_sessions || 0,
-        });
-      }
-    };
-
-    fetchStats();
-  }, []);
-
   return (
-    <main style={{ background: "var(--background)", color: "var(--foreground)" }}>
+    <main className="font-sans"
+          style={{ background: "var(--background)", color: "var(--foreground)" }}
+    >
       
       <section className="relative h-screen">
         {/* The background image stays fixed */}
@@ -94,15 +65,15 @@ export default function LandingPage() {
           </p>
           <div className="flex flex-wrap justify-center gap-6">
             <div className="p-4 rounded-lg shadow bg-[var(--card-bg)] w-48">
-              <p className="text-2xl font-bold">✨ {stats.saved_word_count}</p>
+              <p className="text-2xl font-bold">✨ Temp </p>
               <p className="text-sm text-[var(--foreground-secondary)]">Words Saved</p>
             </div>
             <div className="p-4 rounded-lg shadow bg-[var(--card-bg)] w-48">
-              <p className="text-2xl font-bold">🔥 {stats.daily_study_streak}</p>
+              <p className="text-2xl font-bold">🔥 Temp </p>
               <p className="text-sm text-[var(--foreground-secondary)]">Day Streak</p>
             </div>
             <div className="p-4 rounded-lg shadow bg-[var(--card-bg)] w-48">
-              <p className="text-2xl font-bold">🧪 {stats.total_study_sessions}</p>
+              <p className="text-2xl font-bold">🧪 Temp </p>
               <p className="text-sm text-[var(--foreground-secondary)]">Study Sessions</p>
             </div>
           </div>

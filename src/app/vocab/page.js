@@ -178,13 +178,15 @@ export default function Home() {
   }, []);
 
   return (
-    <main style={{ background: "var(--background)", color: "var(--foreground)" }}>
+    <main className="font-sans" 
+          style={{ background: "var(--background)", color: "var(--foreground)" }}
+    >
       {/* Header Section */}
       <section
         className="shadow p-4 mt-4"
         style={{ background: "var(--background)", color: "var(--foreground)" }}
       >
-        <h1 className="text-2xl font-bold mb-4">Eitan-GO - 英単語ノート</h1>
+        <h1 className="text-2xl font-bold mb-4">Vocab Notebook</h1>
       </section>
 
       {/* Word Input Section*/}

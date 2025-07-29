@@ -5,6 +5,7 @@ import * as wanakana from 'wanakana';
 import ClickableSentence from '@/components/ClickableSentence';
 import DefinitionPopup from "@/components/DefinitionPopup";
 import { createClient } from "@supabase/supabase-js";
+import toast from 'react-hot-toast';
 
 const supabase = createClient(
   process.env.NEXT_PUBLIC_SUPABASE_URL,
@@ -118,19 +119,16 @@ export default function TranslatePage() {
 
         } catch (err) {
             console.error(err);
-            // TODO: Replace with toast
-            alert("Translation failed. Please try again.");
+            toast.error("Translation failed. Please try again.");
         } finally {
             setLoading(false);
         }
     };
 
-    // Effects
-
 
     return(
-        <main className="min-h-screen p-6" style={{ background: "var(--background)", color: "var(--foreground)" }}>
-            <h1 className="text-2xl font-bold mb-4">Translate - Eitan-GO</h1>
+        <main className="min-h-screen p-6 font-sans" style={{ background: "var(--background)", color: "var(--foreground)" }}>
+            <h1 className="text-2xl font-bold mb-4">Translate</h1>
 
             {/* Text Input Section */}
             <div className="mb-6">
