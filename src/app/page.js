@@ -55,33 +55,9 @@ export default function LandingPage() {
         </motion.div>
       </motion.section>
 
-      {/* Stats Section */}
-      <FadeInOnCenter
-        className="relative z-20 min-h-screen pt-[20vh] flex flex-col items-center justify-center text-center px-4"
-      >
-          <h2 className="text-3xl font-bold mb-4">Your Progress</h2>
-          <p className="text-[var(--foreground-secondary)] mb-8 max-w-xl mx-auto">
-            Study Streaks and Vocab Stats coming soon! This is a placeholder for your personal stats.
-          </p>
-          <div className="flex flex-wrap justify-center gap-6">
-            <div className="p-4 rounded-lg shadow bg-[var(--card-bg)] w-48">
-              <p className="text-2xl font-bold">✨ Temp </p>
-              <p className="text-sm text-[var(--foreground-secondary)]">Words Saved</p>
-            </div>
-            <div className="p-4 rounded-lg shadow bg-[var(--card-bg)] w-48">
-              <p className="text-2xl font-bold">🔥 Temp </p>
-              <p className="text-sm text-[var(--foreground-secondary)]">Day Streak</p>
-            </div>
-            <div className="p-4 rounded-lg shadow bg-[var(--card-bg)] w-48">
-              <p className="text-2xl font-bold">🧪 Temp </p>
-              <p className="text-sm text-[var(--foreground-secondary)]">Study Sessions</p>
-            </div>
-          </div>
-      </FadeInOnCenter>
-
       {/* Features Section */}
       <FadeInOnCenter
-        className="relative z-20 min-h-screen pt-[20vh] flex flex-col items-center justify-center text-center px-4"
+        className="relative z-20 min-h-[80vh] pt-[8vh] flex flex-col items-center justify-center text-center px-4"
       >
         <h2 className="text-3xl font-bold mb-4">Features</h2>
         <p className="text-[var(--foreground-secondary)] mb-8 max-w-xl mx-auto">
@@ -98,24 +74,45 @@ export default function LandingPage() {
 
       {/* How It Works Section */}
       <FadeInOnCenter
-        className="relative z-20 min-h-screen pt-[10vh] flex flex-col items-center justify-center text-center px-4"
+        className="relative z-10 min-h-[80vh] pt-[4vh] flex flex-col items-center justify-center text-center px-4"
       >
         <h2 className="text-3xl font-bold mb-4">How It Works</h2>
         <p className="text-[var(--foreground-secondary)] mb-8 max-w-xl mx-auto">
           Type a word, generate a sentence, and add it to your personal notebook — then study with flashcards or quizzes!
         </p>
-        {/* Placeholder for screen recording or GIF */}
-        <div className="w-full max-w-3xl mx-auto h-64 bg-gray-300 rounded shadow-inner flex items-center justify-center">
-          <span className="text-gray-600">[Video or GIF Placeholder]</span>
-        </div>
+
+        <video
+          src="/assets/eitan-go-how-to.mp4"
+          autoPlay
+          muted
+          loop
+          playsInline
+          className="rounded-lg shadow-lg w-full max-w-3xl"
+        />
       </FadeInOnCenter>
 
 
       {/* Footer */}
-      <footer className="border-t py-6 text-center text-sm text-[var(--foreground-secondary)]">
-        <p>
-          Built by <a href="https://www.linkedin.com/in/gary-vincent-ab1542290/" target="_blank" className="underline">Gary Vincent</a> ·{" "}
-          <a href="https://github.com/gtvincent2000" target="_blank" className="underline">GitHub</a>
+      <footer className="border-t py-6 text-center text-sm text-[var(--foreground-secondary)] bg-[var(--background)] z-50 relative">
+        <p className="space-x-2">
+          Built by{" "}
+          <a
+            href="https://www.linkedin.com/in/gary-vincent-ab1542290/"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="underline hover:text-[var(--foreground)] transition-colors cursor-pointer"
+          >
+            Gary Vincent
+          </a>
+          ·
+          <a
+            href="https://github.com/gtvincent2000"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="underline hover:text-[var(--foreground)] transition-colors cursor-pointer"
+          >
+            GitHub
+          </a>
         </p>
       </footer>
     </main>

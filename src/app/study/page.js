@@ -129,10 +129,14 @@ export default function StudyPage() {
             ) : (
                 <div className="flex flex-col gap-4">
 
-                    {/* Placeholder: Display vocab count */}
-                    <p className="mt-4 text-sm" style={{ color: "var(--foreground-secondary)" }}>
-                        You have {vocabList.length} words saved for study.
-                    </p>
+                    {studyMode === null && (
+                        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-8 gap-4 text-center mt-4 mb-6">
+                            <div className="bg-[var(--card-bg)] rounded p-4 shadow">
+                            <p className="text-xl font-bold">📒 {vocabList.length}</p>
+                            <p className="text-sm text-[var(--foreground-secondary)]">Words Saved</p>
+                            </div>
+                        </div>
+                    )}
 
                     {/* Mode selection panel */}
                     {studyMode === null && (
