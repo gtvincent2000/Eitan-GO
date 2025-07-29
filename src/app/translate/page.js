@@ -211,6 +211,9 @@ export default function TranslatePage() {
                             />
                         </button>
                     </div>
+                    <span className="text-sm text-[var(--foreground-secondary)]">
+                            Click on a word to see the definition and add it to your vocabulary notebook!
+                    </span>
                 <div className="mt-8 w-full flex flex-col items-center justify-center text-center">
                     {/* Translation Display */}
                     <h2 className="text-2xl font-bold mb-2">Translation:</h2>
