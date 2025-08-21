@@ -4,7 +4,7 @@ import * as wanakana from "wanakana";
 
 export async function formatRomajiWithTokenizer(sentence) {
   return new Promise((resolve, reject) => {
-    kuromoji.builder({ dicPath: "node_modules/kuromoji/dict" }).build((err, tokenizer) => {
+    kuromoji.builder({ dicPath: "lib/kuromoji_dict" }).build((err, tokenizer) => {
       if (err) return reject(err);
 
       const tokens = tokenizer.tokenize(sentence);
