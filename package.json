@@ -5,8 +5,7 @@
   "scripts": {
     "dev": "next dev",
     "build": "next build",
-    "start": "next start",
-    "postinstall": "node fix-dict-filenames.js"
+    "start": "next start"
   },
   "dependencies": {
     "@supabase/supabase-js": "^2.50.2",
