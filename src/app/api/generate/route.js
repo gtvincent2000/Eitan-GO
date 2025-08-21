@@ -1,29 +1,32 @@
 import OpenAI from "openai";
 import { formatRomajiWithTokenizer } from "@/lib/romajiFormatter";
 
-const openai = new OpenAI({
-  apiKey: process.env.OPENAI_API_KEY,
-});
-
-
 export async function POST(request) {
-  const body = await request.json();
-  const word = body.word;
-
-  console.log("word received from frontend:", word);
-
-  if (!word || typeof word !== "string" || word.trim() === "") {
-    return Response.json(
-      { error: "Invalid input. Please provide a valid word." },
-      { status: 400 }
-    );
-  }
-
   try {
-    let japanese = "";
-    let english = "";
-    let content = "";
+    const body = await request.json();
+    const word = body.word;
 
+    console.log("Word received from frontend:", word);
+
+    if (!word || typeof word !== "string" || word.trim() === "") {
+      console.warn("Invalid input received.");
+      return Response.json(
+        { error: "Invalid input. Please provide a valid word." },
+        { status: 400 }
+      );
+    }
+
+    if (!process.env.OPENAI_API_KEY) {
+      console.error("Missing OPENAI_API_KEY in environment variables.");
+      return Response.json(
+        { error: "Server misconfiguration. Missing API key." },
+        { status: 500 }
+      );
+    }
+
+    const openai = new OpenAI({
+      apiKey: process.env.OPENAI_API_KEY,
+    });
 
     const response = await openai.chat.completions.create({
       model: "gpt-3.5-turbo",
@@ -31,17 +34,17 @@ export async function POST(request) {
         {
           role: "system",
           content: `You are a helpful assistant for beginner Japanese learners.
-                      Generate a short, simple Japanese sentence that uses the given word.
+                    Generate a short, simple Japanese sentence that uses the given word.
 
-                      - You may use kanji, but keep the sentence appropriate for learners.
-                      - The kanji should be common (JLPT N5/N4 level).
-                      - Keep the sentence short and clear.
-                      - Do not explain anything, just return the result.
+                    - You may use kanji, but keep the sentence appropriate for learners.
+                    - The kanji should be common (JLPT N5/N4 level).
+                    - Keep the sentence short and clear.
+                    - Do not explain anything, just return the result.
 
-                      Respond *only* in this exact format:
+                    Respond *only* in this exact format:
 
-                      Japanese: <your sentence with kanji and kana>
-                      English: <English translation of the sentence>`,
+                    Japanese: <your sentence with kanji and kana>
+                    English: <English translation of the sentence>`,
         },
         {
           role: "user",
@@ -51,8 +54,19 @@ export async function POST(request) {
       max_tokens: 180,
     });
 
-    content = response.choices[0].message.content.trim();
+    const content = response.choices[0]?.message?.content?.trim();
+    if (!content) {
+      console.error("OpenAI response had no content:", response);
+      return Response.json(
+        { error: "No content returned from OpenAI." },
+        { status: 500 }
+      );
+    }
+
     console.log("Raw OpenAI content:", content);
+
+    let japanese = "";
+    let english = "";
 
     const lines = content.split("\n");
     for (const line of lines) {
@@ -81,6 +95,3 @@ export async function POST(request) {
     );
   }
 }
-
-
-

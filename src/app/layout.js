@@ -16,6 +16,12 @@ const geistMono = Geist_Mono({
 export const metadata = {
   title: "Eitan-GO",
   description: "Your AI-powered Japanese vocabulary notebook",
+  icons: {
+    icon: "/favicon.ico",
+    shortcut: "/favicon-32x32.png",
+    apple: "/apple-touch-icon.png",
+  },
+  manifest: "/site.webmanifest",
 };
 
 export default function RootLayout({ children }) {
