@@ -5,7 +5,7 @@ import * as wanakana from "wanakana";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
-const dictPath = path.resolve(__dirname, "../lib/kuromoji_dict");
+const dictPath = path.resolve(__dirname, "./kuromoji_dict");
 
 export async function formatRomajiWithTokenizer(sentence) {
   return new Promise((resolve, reject) => {
