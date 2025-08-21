@@ -5,7 +5,8 @@ import * as wanakana from "wanakana";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
-const dictPath = path.resolve(__dirname, "./kuromoji_dict");
+const dictPath = path.resolve(process.cwd(), "src/app/api/generate/kuromoji_dict");
+console.log("📁 Using dictPath:", dictPath); 
 
 export async function formatRomajiWithTokenizer(sentence) {
   return new Promise((resolve, reject) => {
@@ -19,7 +20,7 @@ export async function formatRomajiWithTokenizer(sentence) {
       for (const token of tokens) {
         const kana = token.reading
           ? token.reading.replace(/ー/g, "") // remove long vowels for clarity
-          : token.surface_form; // fallback
+          : token.surface_form;
 
         const kanaHiragana = kana ? wanakana.toHiragana(kana) : token.surface_form;
         kanaWords.push(token.surface_form);
