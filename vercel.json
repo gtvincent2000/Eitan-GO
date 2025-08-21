@@ -1,6 +1,6 @@
 {
   "functions": {
-    "api/generate/route.js": {
+    "app/api/generate/route.js": {
       "includeFiles": "src/lib/kuromoji_dict/**"
     }
   }
