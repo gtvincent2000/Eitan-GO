@@ -82,7 +82,7 @@ export default function LandingPage() {
         </p>
 
         <video
-          src="/assets/eitan-go-how-to.mp4"
+          src="/assets/eitan-go-tutorial.mp4"
           autoPlay
           muted
           loop
