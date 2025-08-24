@@ -91,6 +91,7 @@ const WordInput = ({ word, setWord, setSentence, setTranslation, loading, setLoa
     >
       <label htmlFor="word-input" className="text-lg font-semibold">Enter a word:</label>
       <input
+        id="wordInput"
         type="text"
         value={word}
         onChange={handleChange}
@@ -102,7 +103,7 @@ const WordInput = ({ word, setWord, setSentence, setTranslation, loading, setLoa
         }}
       />
       <button onClick={handleSubmit} className="button-theme px-4 py-2 rounded font-semibold">
-        Submit
+        Generate
       </button>
 
       {loading && (
