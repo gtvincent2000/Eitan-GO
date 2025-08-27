@@ -97,7 +97,7 @@ export default function LandingPage() {
         <p className="space-x-2">
           Built by{" "}
           <a
-            href="https://www.linkedin.com/in/gary-vincent-ab1542290/"
+            href="https://www.linkedin.com/in/gary-vincent-dev/"
             target="_blank"
             rel="noopener noreferrer"
             className="underline hover:text-[var(--foreground)] transition-colors cursor-pointer"
