@@ -177,6 +177,21 @@ export default function StudyPage() {
                                     <span>Quiz</span>
                                     <span>Mode</span>
                             </button>
+                            <a
+                                href="/study/kana"
+                                className="
+                                    pulsate-fwd
+                                    w-40 h-40
+                                    flex flex-col justify-center items-center text-center
+                                    text-xl font-bold
+                                    rounded-xl shadow-lg
+                                    bg-purple-600 text-white hover:bg-purple-700
+                                    transition-transform duration-300 transform hover:scale-105
+                                "
+                                >
+                                <span>Kana</span>
+                                <span>Practice</span>
+                            </a>
                         </div>
                     )}
 

@@ -37,6 +37,9 @@ export default function Navbar() {
         setDropdownOpen(false);
       }
     };
+    const handleScroll = () => {
+      setDropdownOpen(false);
+    };
 
     const storedTheme = localStorage.getItem("theme");
     if (storedTheme === "dark") {
@@ -45,8 +48,10 @@ export default function Navbar() {
     }
 
     document.addEventListener("mousedown", handleClickOutside);
+    window.addEventListener("scroll", handleScroll);
     return () => {
       document.removeEventListener("mousedown", handleClickOutside);
+      window.removeEventListener("scroll", handleScroll);
     };
   }, []);
 

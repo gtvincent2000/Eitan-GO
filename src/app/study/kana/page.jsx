@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import Link from "next/link";
 import ModeSelector from "@/components/kana/ModeSelector";
 import KanaTable from "@/components/kana/KanaTable";
 import QuestionCard from "@/components/kana/QuestionCard";
@@ -29,12 +30,27 @@ export default function KanaStudyPage() {
 
   return (
     <main className="relative mx-auto max-w-3xl p-6 space-y-6">
-      {notMenu && (
+      {view === VIEWS.MENU ? (
+        <Link
+          href="/study"
+          className="sticky top-2 float-right rounded-md px-3 py-1 text-sm transition"
+          aria-label="Back to Study"
+          style={{
+            background: "var(--nav-clickable-bg)",
+            border: "1px solid var(--card-border)",
+          }}
+        >
+          ← Back to Study
+        </Link>
+      ) : (
         <button
           onClick={() => setView(VIEWS.MENU)}
           className="sticky top-2 float-right rounded-md px-3 py-1 text-sm transition"
           aria-label="Return to selection menu"
-          style={{ background: "var(--nav-clickable-bg)", border: `1px solid var(--card-border)` }}
+          style={{
+            background: "var(--nav-clickable-bg)",
+            border: "1px solid var(--card-border)",
+          }}
         >
           ← Back to menu
         </button>
@@ -112,7 +128,8 @@ function Card({ children }) {
 /* -------------------- QUIZ RUNNER -------------------- */
 
 function QuizRunner({ config, onExit }) {
-  const [questions] = useState(() => {
+  // ⬇️ make questions mutable so we can regenerate them
+  const [questions, setQuestions] = useState(() => {
     const pool = buildPool(config);
     return makeQuestions(pool, config, 10);
   });
@@ -129,19 +146,13 @@ function QuizRunner({ config, onExit }) {
     (async () => {
       try {
         const confetti = (await import("canvas-confetti")).default;
-        const pct = score / questions.length;            // 0..1
-        const particleCount = Math.max(40, Math.floor(300 * pct)); // scale by % correct
-        confetti({
-          particleCount,
-          spread: 75,
-          origin: { y: 0.6 },
-          scalar: 0.9,
-        });
+        const pct = score / questions.length;
+        const particleCount = Math.max(40, Math.floor(300 * pct));
+        confetti({ particleCount, spread: 75, origin: { y: 0.6 }, scalar: 0.9 });
       } catch {}
     })();
   }, [done, score, questions.length]);
 
-  // Called by QuestionCard when user answers (but we do NOT advance yet)
   function recordAnswer(given) {
     const correct = isCorrectChoice(given, current.correctValue);
     setAnswers((a) => [
@@ -151,9 +162,17 @@ function QuizRunner({ config, onExit }) {
     if (correct) setScore((s) => s + 1);
   }
 
-  // Advance only on explicit Next
   function nextQuestion() {
     setIndex((i) => i + 1);
+  }
+
+  // 🔁 Retake in place with SAME config (no page reload, no leaving view)
+  function retakeSameSettings() {
+    const pool = buildPool(config);
+    setQuestions(makeQuestions(pool, config, 10));
+    setIndex(0);
+    setScore(0);
+    setAnswers([]);
   }
 
   if (done) {
@@ -184,7 +203,7 @@ function QuizRunner({ config, onExit }) {
         </div>
 
         <div className="flex gap-2">
-          <button className="rounded px-4 py-2 button-theme" onClick={() => location.reload()}>
+          <button className="rounded px-4 py-2 button-theme" onClick={retakeSameSettings}>
             Retake (same settings)
           </button>
           <button
@@ -204,7 +223,6 @@ function QuizRunner({ config, onExit }) {
       question={current}
       onAnswer={recordAnswer}
       onNext={nextQuestion}
-      // point to your existing SFX files used elsewhere
       sfxCorrectUrl="/sounds/correct.mp3"
       sfxIncorrectUrl="/sounds/incorrect.mp3"
     />
