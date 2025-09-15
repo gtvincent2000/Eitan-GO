@@ -114,3 +114,45 @@ body {
 .button-theme:hover {
   background: var(--button-hover);
 }
+
+/* Themed card shell for panels */
+.card-theme {
+  background: var(--card-bg);
+  border: 1px solid var(--card-border);
+  border-radius: 0.75rem; /* rounded-xl */
+  box-shadow: 0 1px 2px rgb(0 0 0 / 0.05);
+}
+
+/* Subtle section titles */
+.section-title {
+  color: var(--foreground-secondary);
+}
+
+/* Inputs that match theme */
+.input-theme {
+  background: var(--input-bg);
+  color: var(--input-text);
+  border: 1px solid var(--border-color);
+}
+
+/* Top-right “Back to menu” chip */
+.nav-chip {
+  background: var(--nav-clickable-bg);
+  border: 1px solid var(--card-border);
+}
+.nav-chip:hover {
+  background: var(--nav-clickable-hover);
+}
+
+/* Toggle switch parts (track + knob) */
+.switch-track {
+  background: var(--nav-clickable-bg);
+  transition: background 0.2s ease;
+}
+.switch-track[data-checked="true"] {
+  background: var(--button-bg);
+}
+.switch-knob {
+  background: var(--button-text); /* white-ish in light, off-white in dark */
+  box-shadow: 0 1px 2px rgb(0 0 0 / 0.2);
+}
