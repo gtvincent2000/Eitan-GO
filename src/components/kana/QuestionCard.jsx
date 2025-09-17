@@ -206,9 +206,9 @@ export default function QuestionCard({
       {isTyping && revealed && (
         <div className="text-sm">
           {normalize(selected) === normalize(correctValue) ? (
-            <span style={{ color: "var(--correct-fg, #14532d)" }}>Correct!</span>
+            <span style={{ color: "var(--correct-bg)" }}>Correct!</span>
           ) : (
-            <span style={{ color: "var(--incorrect-fg, #7f1d1d)" }}>
+            <span style={{ color: "var(--incorrect-bg, #7f1d1d)" }}>
               Incorrect. Correct answer: <b>{correctValue}</b>
             </span>
           )}

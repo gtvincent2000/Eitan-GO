@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import Switch from "@/components/ui/Switch"; // uses your themed switch
+import toast from 'react-hot-toast';
 
 export default function ModeSelector({ onBegin }) {
   // mode toggles
@@ -36,11 +37,11 @@ export default function ModeSelector({ onBegin }) {
     const modes = getEnabledModes();
     const scripts = getEnabledScripts();
     if (modes.length === 0) {
-      alert("Select at least one mode.");
+      toast.error("Select at least one mode.");
       return;
     }
     if (scripts.length === 0) {
-      alert("Select at least one script (hiragana or katakana).");
+      toast.error("Select at least one script (hiragana or katakana).");
       return;
     }
     onBegin?.({
